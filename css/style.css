@@ -67,7 +67,6 @@ img {
 @media(orientation: portrait) {
     .hero {
         padding: 3em 0;
-        background-position: top center;
     }
 }
 
