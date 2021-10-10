@@ -1,0 +1,41 @@
+#scoreboard {
+	outline: solid 2px grey;
+	background-color: silver;
+	font-size: 3em;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin-bottom: 2rem;
+}
+
+#gameboard {
+    background-color: silver;
+    display: flex;
+    width: 340px;
+    height: 340px;
+    position: relative;
+    left: 10px;
+    top: 10px;
+    flex-flow: column wrap;
+    justify-content: space-evenly;
+}
+
+.board-row {
+    display: flex;
+    width: 340px;
+    height: 70px;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.board-field {
+    display: inline-block;
+    width: 70px;
+	line-height: 70px;
+    height: 70px;
+    background-color: white;
+    outline: 4px solid grey;
+	font-size: 50px;
+	font-weight: 700;
+	text-align: center;
+}
