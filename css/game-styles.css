@@ -39,3 +39,35 @@
 	font-weight: 700;
 	text-align: center;
 }
+
+@keyframes appearage {
+    from {transform: scale(0.1,0.1)}
+    to {transform: scale(1,1)}
+}
+
+@keyframes upscalage {
+    0% {transform: scale(1,1)}
+    15% {transform: scale(0.8,0.8)}
+    35% {transform: scale(1.2,1.2); opacity:0.5;}
+    100% {transform: scale(1,1); opacity: 0.8;}
+}
+
+@keyframes leftmovage {
+    from {transform-origin: left; transform: scale(1);}
+    to {transform-origin: left; transform: scale(0.1,1);}
+}
+
+@keyframes rightmovage {
+    from {transform-origin: right; transform: scale(1);}
+    to {transform-origin: left; transform: scale(0.1,1);}
+}
+
+@keyframes upmovage {
+    from {transform-origin: top; transform: scale(1);}
+    to {transform-origin: left; transform: scale(1,0.1);}
+}
+
+@keyframes downmovage {
+    from {transform-origin: bottom; transform: scale(1);}
+    to {transform-origin: left; transform: scale(1,0.1);}
+}

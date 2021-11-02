@@ -93,6 +93,8 @@ function createTile(value = null, boardField = null) {
 	boardField.style.backgroundColor = 'rgb('+bgColor.red+','+bgColor.green+','+bgColor.blue+')';
 	boardField.style.color = textColor;
 	boardField.style.fontSize = '' + fontSize + 'px';
+        
+        return boardField;
 }
 
 function findTouchByID(touchID) {
@@ -109,14 +111,19 @@ function seekXDirection(boardField, row, column, endColumn, step) {
 	
 	if(isBoardFieldEmpty(neighbour)) {
 		removeTile(boardField);
-		createTile(value, neighbour);
+		let newTile = createTile(value, neighbour);
+                let animationName = (step < 0) ? 'leftmovage' : 'rightmovage';
+                newTile.style.animationName = animationName;
+                newTile.style.animationDuration = '125ms';
 		seekXDirection(neighbour, row, column + step, endColumn, step);
 	} else if(value === getBoardFieldTileValue(neighbour)) {
 		let newValue = 2 * value;
 		score += newValue;
 		document.querySelector('#displayScore').innerText = score;
 		removeTile(boardField);
-		createTile(newValue, neighbour);
+		let newTile = createTile(newValue, neighbour);
+                newTile.style.animationName = 'upscalage';
+                newTile.style.animationDuration = '350ms';
 	}
 }
 
@@ -130,14 +137,19 @@ function seekYDirection(boardField, row, column, endRow, step) {
 	
 	if(isBoardFieldEmpty(neighbour)) {
 		removeTile(boardField);
-		createTile(value, neighbour);
+		let newTile = createTile(value, neighbour);
+                let animationName = (step < 0) ? 'upmovage' : 'downmovage';
+                newTile.style.animationName = animationName;
+                newTile.style.animationDuration = '125ms';
 		seekYDirection(neighbour, row + step, column, endRow, step);
 	} else if(value === getBoardFieldTileValue(neighbour)) {
 		let newValue = 2 * value;
 		score += newValue;
 		document.querySelector('#displayScore').innerText = score;
 		removeTile(boardField);
-		createTile(newValue, neighbour);
+		let newTile = createTile(newValue, neighbour);
+                newTile.style.animationName = 'upscalage';
+                newTile.style.animationDuration = '350ms';
 	}
 }
 
@@ -235,7 +247,9 @@ function handleTouchEnd(event) {
 	
 	console.log(direction);
 	moveTiles(direction);
-	createTile();
+        let newTile = createTile();
+        newTile.style.animationName = 'appearage';
+        newTile.style.animationDuration = '250ms';
 }
 
 function handleKeyboardKeyUp(event) {
@@ -244,7 +258,9 @@ function handleKeyboardKeyUp(event) {
 	if(keyPressed.match(/^Arrow(.+)$/)) {
 		let methodName = 'moveTiles' + RegExp.$1;
 		window[methodName]();
-		createTile();
+		let newTile = createTile();
+                newTile.style.animationName = 'appearage';
+                newTile.style.animationDuration = '250ms';
 	}
 }
 
