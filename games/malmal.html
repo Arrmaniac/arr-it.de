@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="Andreas Rodriguez Rivera">
+    <meta name="description" content="Mal doch einfach drauflos.">
+    <meta name="keywords" content="vanilla JS only, game, drawing">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mal mal!</title>
+    <link rel="shortcut icon" href="/images/icons/arrit_icon2.32x32.png">
+    <link rel="icon" type="image/png" href="/images/icons/arrit_icon2.32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/icons/arrit_icon2.96x96.png" sizes="96x96">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/arrit_icon2.180x180.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/game-styles.css" rel="stylesheet" />
+    <script src="/games/malmal/malmal.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Mal mal!</h1>
+    </header>
+    <main>
+        <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="2400" style="background-color: #333; position: relative;"></svg>
+    </main>
+    <script>
+/*<![CDATA[*/
+const svgNamespaceURI = 'http://www.w3.org/2000/svg';
+const board = document.querySelector('svg');
+const ongoingDrawings = [];
+
+function handleTouchStart(event) {
+	event.preventDefault();
+	Array.from(event.touches).forEach(touch => {
+        let polyline = document.createElementNS(svgNamespaceURI,'polyline');
+        board.appendChild(polyline);
+        polyline.setAttribute('fill','none');
+        polyline.setAttribute('stroke','yellow');
+        let points = touch.pageX + ',' + touch.pageY;
+        polyline.setAttribute('points',points);
+        let drawing = {
+            identifier: touch.identifier,
+            touchPoints: [touch],
+            polyline: polyline
+        };
+		ongoingDrawings.push(drawing);
+	});
+}
+
+function findOngoingDrawingByID(touchID) {
+	return ongoingDrawings.find(drawing => drawing.identifier === touchID);
+}
+
+function handleTouchMove(event){
+    event.preventDefault();
+    Array.from(event.changedTouches)
+        .forEach(touch => {
+            let ongoingDrawing = findOngoingDrawingByID(touch.identifier);
+
+            if(ongoingDrawing === undefined) return;
+
+            ongoingDrawing.touchPoints.push(touch);
+            let newPoints = touch.pageX + ',' + touch.pageY;
+            ongoingDrawing.polyline.attributes.points.textContent += ' ' + newPoints;
+        });
+}
+
+function handleTouchEnd(event) {
+	event.preventDefault();
+	let endedTouches = Array.from(event.changedTouches).filter(touch => findOngoingDrawingByID(touch.identifier) !== undefined);
+	let movementVectors = endedTouches.map(touchEnd => {
+		let drawing = findOngoingDrawingByID(touchEnd.identifier);
+        drawing.touchPoints.push(touchEnd);
+        let newPoints = touchEnd.pageX + ',' + touchEnd.pageY;
+        drawing.polyline.attributes.points.textContent += ' ' + newPoints;
+		return drawing;
+	});
+    console.log(movementVectors);
+}
+
+board.addEventListener('touchstart', handleTouchStart, false);
+board.addEventListener('touchmove', handleTouchMove, false);
+board.addEventListener('touchend', handleTouchEnd, false);
+/*]]>*/
+    </script>
+</body>
+</html>
