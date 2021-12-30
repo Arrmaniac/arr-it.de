@@ -27,6 +27,7 @@
 /*<![CDATA[*/
 const svgNamespaceURI = 'http://www.w3.org/2000/svg';
 const board = document.querySelector('svg');
+const allDrawings = [];
 const ongoingDrawings = [];
 
 function handleTouchStart(event) {
@@ -36,7 +37,7 @@ function handleTouchStart(event) {
         board.appendChild(polyline);
         polyline.setAttribute('fill','none');
         polyline.setAttribute('stroke','yellow');
-        let points = touch.pageX + ',' + touch.pageY;
+        let points = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);
         polyline.setAttribute('points',points);
         let drawing = {
             identifier: touch.identifier,
@@ -44,6 +45,7 @@ function handleTouchStart(event) {
             polyline: polyline
         };
 		ongoingDrawings.push(drawing);
+        allDrawings.push(drawing);
 	});
 }
 
@@ -60,7 +62,7 @@ function handleTouchMove(event){
             if(ongoingDrawing === undefined) return;
 
             ongoingDrawing.touchPoints.push(touch);
-            let newPoints = touch.pageX + ',' + touch.pageY;
+            let newPoints = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);;
             ongoingDrawing.polyline.attributes.points.textContent += ' ' + newPoints;
         });
 }
@@ -68,14 +70,15 @@ function handleTouchMove(event){
 function handleTouchEnd(event) {
 	event.preventDefault();
 	let endedTouches = Array.from(event.changedTouches).filter(touch => findOngoingDrawingByID(touch.identifier) !== undefined);
-	let movementVectors = endedTouches.map(touchEnd => {
-		let drawing = findOngoingDrawingByID(touchEnd.identifier);
-        drawing.touchPoints.push(touchEnd);
-        let newPoints = touchEnd.pageX + ',' + touchEnd.pageY;
+	let movementVectors = endedTouches.map(touch => {
+		let drawing = findOngoingDrawingByID(touch.identifier);
+        drawing.touchPoints.push(touch);
+        let newPoints = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);;
         drawing.polyline.attributes.points.textContent += ' ' + newPoints;
+        ongoingDrawings.splice(ongoingDrawings.indexOf(drawing), 1);
 		return drawing;
 	});
-    console.log(movementVectors);
+    //console.log(movementVectors);
 }
 
 board.addEventListener('touchstart', handleTouchStart, false);
