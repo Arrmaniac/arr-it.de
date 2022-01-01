@@ -45,7 +45,7 @@
             border-radius: 15%;
         }
 
-        .toolbar button:is(:focus,:hover) {
+        .toolbar button:is(:focus,:hover,:target) {
             background-color: grey;
         }
 
@@ -73,6 +73,7 @@
         </h1>
         <div class="toolbar">
             <button id="resetAll" title="reset">&larrb;</button>
+            <button id="removeLast" title="remove last">&cularr;</button>
             <div id="colorpickmenu" class="submenuparent">
                 <button id="colorpick" title="Colorpicker">&ofcir;</button>
                 <div id="colorpickmenulist" class="submenu">
@@ -97,6 +98,29 @@
     </main>
     <script>
 /*<![CDATA[*/
+class Drawing {
+    identifier;
+    touchPoints = [];
+    polyline;
+    parentBoard;
+
+    constructor(parentBoard, touch){
+        this.parentBoard = parentBoard;
+        this.identifier = touch.identifier;
+        this.touchPoints.push(touch);
+    }
+
+    startPolyline(svgNamespaceURI, touch, color, strokeWidth) {
+        this.polyline = document.createElementNS(svgNamespaceURI,'polyline');
+        this.parentBoard.appendChild(this.polyline);
+        this.polyline.setAttribute('fill','none');
+        this.polyline.setAttribute('stroke', color);
+        let points = (touch.pageX - this.parentBoard.parentNode.offsetLeft) + ',' + (touch.pageY - this.parentBoard.parentNode.offsetTop);
+        this.polyline.setAttribute('points', points);
+        this.polyline.setAttribute('stroke-width', strokeWidth);
+    }
+}
+
 const svgNamespaceURI = 'http://www.w3.org/2000/svg';
 const board = document.querySelector('svg');
 const allDrawings = [];
@@ -111,6 +135,23 @@ const colorpickButton = document.querySelector('#colorpick');
 colorpick.style.color = currentColor;
 
 const strokewidthsubmenu = document.querySelector('#strokewidthsubmenu');
+
+document.querySelector('#removeLast').addEventListener('click', event => {
+    let last = allDrawings.pop();
+    last.polyline.remove();
+    delete last;
+});
+
+document.querySelector('#resetAll').addEventListener('click', event => {
+    do {
+        let last = allDrawings.pop();
+
+        if(last === undefined) break;
+
+        last.polyline.remove();
+        delete last;
+    } while (true);
+});
 
 function toggleSubmenu(submenuNode) {
     let isActive = submenuNode.matches('[data-show]');
@@ -144,21 +185,11 @@ colorpickmenulist.addEventListener('click', event => {
 function handleTouchStart(event) {
 	event.preventDefault();
 	Array.from(event.touches).forEach(touch => {
-        let polyline = document.createElementNS(svgNamespaceURI,'polyline');
-        board.appendChild(polyline);
-        polyline.setAttribute('fill','none');
-        polyline.setAttribute('stroke', currentColor);
-        let points = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);
-        polyline.setAttribute('points',points);
-        polyline.setAttribute('stroke-width', currentStrokeWidth);
-        let drawing = {
-            identifier: touch.identifier,
-            touchPoints: [touch],
-            polyline: polyline
-        };
+        let drawing = new Drawing(board, touch);
+        drawing.startPolyline(svgNamespaceURI, touch, currentColor, currentStrokeWidth);
 		ongoingDrawings.push(drawing);
         allDrawings.push(drawing);
-        console.log('touchStart', drawing, event);
+        //console.log('touchStart', drawing, event);
 	});
 }
 
@@ -189,7 +220,7 @@ function handleTouchEnd(event) {
         let newPoints = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);;
         drawing.polyline.attributes.points.textContent += ' ' + newPoints;
         ongoingDrawings.splice(ongoingDrawings.indexOf(drawing), 1);
-        console.log('touchEnd', drawing, event);
+        //console.log('touchEnd', drawing, event);
 		return drawing;
 	});
     //console.log(movementVectors);
@@ -198,6 +229,72 @@ function handleTouchEnd(event) {
 board.addEventListener('touchstart', handleTouchStart, false);
 board.addEventListener('touchmove', handleTouchMove, false);
 board.addEventListener('touchend', handleTouchEnd, false);
+
+/**
+ *
+function copyStylesInline(destinationNode, sourceNode) {
+   var containerElements = ["svg","g"];
+   for (var cd = 0; cd < destinationNode.childNodes.length; cd++) {
+       var child = destinationNode.childNodes[cd];
+       if (containerElements.indexOf(child.tagName) != -1) {
+            copyStylesInline(child, sourceNode.childNodes[cd]);
+            continue;
+       }
+       var style = sourceNode.childNodes[cd].currentStyle || window.getComputedStyle(sourceNode.childNodes[cd]);
+       if (style == "undefined" || style == null) continue;
+       for (var st = 0; st < style.length; st++){
+            child.style.setProperty(style[st], style.getPropertyValue(style[st]));
+       }
+   }
+}
+
+function triggerDownload (imgURI, fileName) {
+  var evt = new MouseEvent("click", {
+    view: window,
+    bubbles: false,
+    cancelable: true
+  });
+  var a = document.createElement("a");
+  a.setAttribute("download", fileName);
+  a.setAttribute("href", imgURI);
+  a.setAttribute("target", '_blank');
+  a.dispatchEvent(evt);
+}
+
+function downloadSvg(svg, fileName) {
+  var copy = svg.cloneNode(true);
+  copyStylesInline(copy, svg);
+  var canvas = document.createElement("canvas");
+  var bbox = svg.getBBox();
+  canvas.width = bbox.width;
+  canvas.height = bbox.height;
+  var ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, bbox.width, bbox.height);
+  var data = (new XMLSerializer()).serializeToString(copy);
+  var DOMURL = window.URL || window.webkitURL || window;
+  var img = new Image();
+  var svgBlob = new Blob([data], {type: "image/svg+xml;charset=utf-8"});
+  var url = DOMURL.createObjectURL(svgBlob);
+  img.onload = function () {
+    ctx.drawImage(img, 0, 0);
+    DOMURL.revokeObjectURL(url);
+    if (typeof navigator !== "undefined" && navigator.msSaveOrOpenBlob)
+    {
+        var blob = canvas.msToBlob();
+        navigator.msSaveOrOpenBlob(blob, fileName);
+    }
+    else {
+        var imgURI = canvas
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+        triggerDownload(imgURI, fileName);
+    }
+    document.removeChild(canvas);
+  };
+  img.src = url;
+}
+ *
+ */
 /*]]>*/
     </script>
 </body>
