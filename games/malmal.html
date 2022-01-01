@@ -15,13 +15,43 @@
     <link href="/css/style.css" rel="stylesheet" />
     <link href="/css/game-styles.css" rel="stylesheet" />
     <script src="/games/malmal/malmal.js" defer></script>
+    <style type="text/css">
+        
+        svg.paintboard {
+            background-color: #333;
+            position: relative;
+            width: 100%;
+            height: 80vh;
+        }
+
+        header > h1 {
+            margin: 0;
+            padding: 0.25rem;
+        }
+        .toolbar {
+            display: flex;
+            gap: 0.25rem;
+        }
+        .toolbar button {
+            font-size: 1.25rem;
+        }
+
+        #colorpick {
+            background-color: #333;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Mal mal!</h1>
+        <h1>Mal mal!
+        </h1>
+        <div class="toolbar">
+            <button id="resetAll" title="reset">&larrb;</button>
+            <button id="colorpick" title="colorpick">&ofcir;</button>
+        </div>
     </header>
     <main>
-        <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="2400" style="background-color: #333; position: relative;"></svg>
+        <svg class="paintboard" xmlns="http://www.w3.org/2000/svg"></svg>
     </main>
     <script>
 /*<![CDATA[*/
@@ -29,6 +59,13 @@ const svgNamespaceURI = 'http://www.w3.org/2000/svg';
 const board = document.querySelector('svg');
 const allDrawings = [];
 const ongoingDrawings = [];
+const startColor = 'yellow';
+let currentColor = startColor;
+const startStrokeWidth = '1';
+let currentStrokeWidth = startStrokeWidth;
+
+const colorpickButton = document.querySelector('#colorpick');
+colorpick.style.color = currentColor;
 
 function handleTouchStart(event) {
 	event.preventDefault();
@@ -36,9 +73,10 @@ function handleTouchStart(event) {
         let polyline = document.createElementNS(svgNamespaceURI,'polyline');
         board.appendChild(polyline);
         polyline.setAttribute('fill','none');
-        polyline.setAttribute('stroke','yellow');
+        polyline.setAttribute('stroke', currentColor);
         let points = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);
         polyline.setAttribute('points',points);
+        polyline.setAttribute('stroke-width', currentStrokeWidth);
         let drawing = {
             identifier: touch.identifier,
             touchPoints: [touch],
@@ -46,6 +84,7 @@ function handleTouchStart(event) {
         };
 		ongoingDrawings.push(drawing);
         allDrawings.push(drawing);
+        console.log('touchStart', drawing, event);
 	});
 }
 
@@ -76,6 +115,7 @@ function handleTouchEnd(event) {
         let newPoints = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);;
         drawing.polyline.attributes.points.textContent += ' ' + newPoints;
         ongoingDrawings.splice(ongoingDrawings.indexOf(drawing), 1);
+        console.log('touchEnd', drawing, event);
 		return drawing;
 	});
     //console.log(movementVectors);
