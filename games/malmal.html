@@ -16,7 +16,7 @@
     <link href="/css/game-styles.css" rel="stylesheet" />
     <script src="/games/malmal/malmal.js" defer></script>
     <style type="text/css">
-        
+
         svg.paintboard {
             background-color: #333;
             position: relative;
@@ -31,13 +31,39 @@
         .toolbar {
             display: flex;
             gap: 0.25rem;
-        }
-        .toolbar button {
-            font-size: 1.25rem;
+            background-color: #555;
+            margin-bottom: 0.25rem;
+            padding: 0.25rem;
         }
 
-        #colorpick {
+        .toolbar button {
+            font-size: 1.25rem;
             background-color: #333;
+            color: white;
+            border-style: solid;
+            border-color: silver;
+            border-radius: 15%;
+        }
+
+        .toolbar button:is(:focus,:hover) {
+            background-color: grey;
+        }
+
+        .submenuparent {
+            position: relative;
+        }
+
+        .submenu {
+            position: absolute;
+            z-index: 1;
+            display: none;
+        }
+
+        .submenu[data-show] {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            padding-top: 0.25rem;
         }
     </style>
 </head>
@@ -47,7 +73,23 @@
         </h1>
         <div class="toolbar">
             <button id="resetAll" title="reset">&larrb;</button>
-            <button id="colorpick" title="colorpick">&ofcir;</button>
+            <div id="colorpickmenu" class="submenuparent">
+                <button id="colorpick" title="Colorpicker">&ofcir;</button>
+                <div id="colorpickmenulist" class="submenu">
+                    <button class="colorpick" title="Yellow" data-color="yellow" style="color: yellow;">&ofcir;</button>
+                    <button class="colorpick" title="Red" data-color="red" style="color: red;">&ofcir;</button>
+                    <button class="colorpick" title="Blue" data-color="blue" style="color: blue;">&ofcir;</button>
+                    <button class="colorpick" title="Fuchsia" data-color="fuchsia" style="color: fuchsia;">&ofcir;</button>
+                    <button class="colorpick" title="Turquoise" data-color="turquoise" style="color: turquoise;">&ofcir;</button>
+                    <button class="colorpick" title="Lawngreen" data-color="lawngreen" style="color: lawngreen;">&ofcir;</button>
+                </div>
+            </div>
+            <div class="submenuparent">
+                <button id="strokewidthpick" title="Strokewidthpicker">&marker;</button>
+                <div id="strokewidthsubmenu" class="submenu">
+                    <input type="range" min="1" max="10" value="1" />
+                </div>
+            </div>
         </div>
     </header>
     <main>
@@ -64,8 +106,40 @@ let currentColor = startColor;
 const startStrokeWidth = '1';
 let currentStrokeWidth = startStrokeWidth;
 
+const colorpickmenulist = document.querySelector('#colorpickmenulist');
 const colorpickButton = document.querySelector('#colorpick');
 colorpick.style.color = currentColor;
+
+const strokewidthsubmenu = document.querySelector('#strokewidthsubmenu');
+
+function toggleSubmenu(submenuNode) {
+    let isActive = submenuNode.matches('[data-show]');
+
+    if(isActive){
+        submenuNode.removeAttribute('data-show');
+    } else {
+        submenuNode.setAttribute('data-show','');
+    }
+}
+
+colorpickButton.addEventListener('click', event => {
+    toggleSubmenu(colorpickmenulist);
+});
+
+document.querySelector('#strokewidthpick').addEventListener('click',event => {
+    toggleSubmenu(strokewidthsubmenu);
+});
+
+strokewidthsubmenu.querySelector('input[type="range"]').addEventListener('change', event => {
+    currentStrokeWidth = event.target.value;
+});
+
+colorpickmenulist.addEventListener('click', event => {
+    if(!event.target.matches('button.colorpick')) return;
+    currentColor = event.target.dataset.color;
+    colorpick.style.color = currentColor;
+    colorpickButton.dispatchEvent(new Event('click'));
+});
 
 function handleTouchStart(event) {
 	event.preventDefault();
