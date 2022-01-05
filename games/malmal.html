@@ -74,19 +74,26 @@
         <div class="toolbar">
             <button id="resetAll" title="reset">&larrb;</button>
             <button id="removeLast" title="remove last">&cularr;</button>
+            <div id="brushpickmenu" class="submenuparent">
+                <button id="brushpick" title="Brushpicker" data-submenubutton>&acd;</button>
+                <div id="brushpickmenulist" class="submenu">
+                    <button class="brushpick" title="Line" data-brush="line">&acd;</button>
+                    <button class="brushpick" title="Spraycan" data-brush="spraycan">&blk12;</button>
+                </div>
+            </div>
             <div id="colorpickmenu" class="submenuparent">
-                <button id="colorpick" title="Colorpicker">&ofcir;</button>
+                <button id="colorpick" title="Colorpicker" data-submenubutton>&ofcir;</button>
                 <div id="colorpickmenulist" class="submenu">
-                    <button class="colorpick" title="Yellow" data-color="yellow" style="color: yellow;">&ofcir;</button>
-                    <button class="colorpick" title="Red" data-color="red" style="color: red;">&ofcir;</button>
-                    <button class="colorpick" title="Blue" data-color="blue" style="color: blue;">&ofcir;</button>
-                    <button class="colorpick" title="Fuchsia" data-color="fuchsia" style="color: fuchsia;">&ofcir;</button>
-                    <button class="colorpick" title="Turquoise" data-color="turquoise" style="color: turquoise;">&ofcir;</button>
-                    <button class="colorpick" title="Lawngreen" data-color="lawngreen" style="color: lawngreen;">&ofcir;</button>
+                    <button title="Yellow" data-colorpick data-color="yellow" style="color: yellow;">&ofcir;</button>
+                    <button title="Red" data-colorpick data-color="red" style="color: red;">&ofcir;</button>
+                    <button title="Blue" data-colorpick data-color="blue" style="color: blue;">&ofcir;</button>
+                    <button title="Fuchsia" data-colorpick data-color="fuchsia" style="color: fuchsia;">&ofcir;</button>
+                    <button title="Turquoise" data-colorpick data-color="turquoise" style="color: turquoise;">&ofcir;</button>
+                    <button title="Lawngreen" data-colorpick data-color="lawngreen" style="color: lawngreen;">&ofcir;</button>
                 </div>
             </div>
             <div class="submenuparent">
-                <button id="strokewidthpick" title="Strokewidthpicker">&marker;</button>
+                <button id="strokewidthpick" title="Strokewidthpicker" data-submenubutton>&marker;</button>
                 <div id="strokewidthsubmenu" class="submenu">
                     <input type="range" min="1" max="10" value="1" />
                 </div>
@@ -99,6 +106,7 @@
     <script>
 /*<![CDATA[*/
 class Drawing {
+    static svgNamespaceURI = 'http://www.w3.org/2000/svg';
     identifier;
     touchPoints = [];
     polyline;
@@ -110,14 +118,20 @@ class Drawing {
         this.touchPoints.push(touch);
     }
 
-    startPolyline(svgNamespaceURI, touch, color, strokeWidth) {
-        this.polyline = document.createElementNS(svgNamespaceURI,'polyline');
+    startPolyline(touch, color, strokeWidth) {
+        this.polyline = document.createElementNS(this.constructor.svgNamespaceURI,'polyline');
         this.parentBoard.appendChild(this.polyline);
         this.polyline.setAttribute('fill','none');
         this.polyline.setAttribute('stroke', color);
         let points = (touch.pageX - this.parentBoard.parentNode.offsetLeft) + ',' + (touch.pageY - this.parentBoard.parentNode.offsetTop);
         this.polyline.setAttribute('points', points);
         this.polyline.setAttribute('stroke-width', strokeWidth);
+    }
+
+    continuePolyline(touch) {
+        this.touchPoints.push(touch);
+        let newPoints = (touch.pageX - this.parentBoard.parentNode.offsetLeft) + ',' + (touch.pageY - this.parentBoard.parentNode.offsetTop);
+        this.polyline.attributes.points.textContent += ' ' + newPoints;
     }
 }
 
@@ -129,6 +143,7 @@ const startColor = 'yellow';
 let currentColor = startColor;
 const startStrokeWidth = '1';
 let currentStrokeWidth = startStrokeWidth;
+const startBrush = 'line';
 
 const colorpickmenulist = document.querySelector('#colorpickmenulist');
 const colorpickButton = document.querySelector('#colorpick');
@@ -163,6 +178,8 @@ function toggleSubmenu(submenuNode) {
     }
 }
 
+/**
+ * not needed anymore...
 colorpickButton.addEventListener('click', event => {
     toggleSubmenu(colorpickmenulist);
 });
@@ -170,13 +187,21 @@ colorpickButton.addEventListener('click', event => {
 document.querySelector('#strokewidthpick').addEventListener('click',event => {
     toggleSubmenu(strokewidthsubmenu);
 });
+*/
+
+document.querySelector('.toolbar').addEventListener('click', event => {
+    if(!event.target.matches('[data-submenubutton]')) return;
+
+    let submenulist = event.target.closest('.submenuparent').querySelector('.submenu');
+    toggleSubmenu(submenulist);
+});
 
 strokewidthsubmenu.querySelector('input[type="range"]').addEventListener('change', event => {
     currentStrokeWidth = event.target.value;
 });
 
 colorpickmenulist.addEventListener('click', event => {
-    if(!event.target.matches('button.colorpick')) return;
+    if(!event.target.matches('button[data-colorpick]')) return;
     currentColor = event.target.dataset.color;
     colorpick.style.color = currentColor;
     colorpickButton.dispatchEvent(new Event('click'));
@@ -186,10 +211,10 @@ function handleTouchStart(event) {
 	event.preventDefault();
 	Array.from(event.touches).forEach(touch => {
         let drawing = new Drawing(board, touch);
-        drawing.startPolyline(svgNamespaceURI, touch, currentColor, currentStrokeWidth);
+        drawing.startPolyline(touch, currentColor, currentStrokeWidth);
 		ongoingDrawings.push(drawing);
         allDrawings.push(drawing);
-        //console.log('touchStart', drawing, event);
+        console.log('touchStart', drawing, event);
 	});
 }
 
@@ -205,9 +230,7 @@ function handleTouchMove(event){
 
             if(ongoingDrawing === undefined) return;
 
-            ongoingDrawing.touchPoints.push(touch);
-            let newPoints = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);;
-            ongoingDrawing.polyline.attributes.points.textContent += ' ' + newPoints;
+            ongoingDrawing.continuePolyline(touch);
         });
 }
 
@@ -216,9 +239,7 @@ function handleTouchEnd(event) {
 	let endedTouches = Array.from(event.changedTouches).filter(touch => findOngoingDrawingByID(touch.identifier) !== undefined);
 	let movementVectors = endedTouches.map(touch => {
 		let drawing = findOngoingDrawingByID(touch.identifier);
-        drawing.touchPoints.push(touch);
-        let newPoints = (touch.pageX - board.parentNode.offsetLeft) + ',' + (touch.pageY - board.parentNode.offsetTop);;
-        drawing.polyline.attributes.points.textContent += ' ' + newPoints;
+        drawing.continuePolyline(touch);
         ongoingDrawings.splice(ongoingDrawings.indexOf(drawing), 1);
         //console.log('touchEnd', drawing, event);
 		return drawing;
