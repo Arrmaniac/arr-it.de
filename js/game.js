@@ -291,7 +291,7 @@ function trySpawnRandomTile()
 {
     try {
         let newTile = createTile();
-        let tileValue = Number.parseInt(newTile.innerText);
+        let tileValue = getBoardFieldTileValue(newTile);
         tilesCastHistory.push({tile: newTile, tileValue});
         newTile.style.animationName = 'appearage';
         newTile.style.animationDuration = '250ms';
@@ -328,7 +328,7 @@ function handleTouchEnd(event) {
 	let movementCount = moveTiles(direction);
     let newTileSpawned = trySpawnRandomTile();
 
-    if(!newTileSpawned && (movementCount === 0)) {
+    if(!newTileSpawned && (movementCount === 0) && hasNoMergableTiles(direction)) {
         handleGameover();
     }
 }
@@ -340,13 +340,44 @@ function handleKeyboardKeyUp(event) {
         return;
 	}
 
-    let methodName = 'moveTiles' + RegExp.$1;
+    let direction = RegExp.$1;
+    let methodName = 'moveTiles' + direction;
     let movementCount = window[methodName]();
     let newTileSpawned = trySpawnRandomTile();
 
-    if(!newTileSpawned && (movementCount === 0)) {
+    if(!newTileSpawned && (movementCount === 0) && hasNoMergableTiles(direction)) {
         handleGameover();
     }
+}
+
+function hasNoMergableTiles(lastMovedDirection) {
+    let checkColumns = lastMovedDirection.match(/Left|Right/i);
+    let neighbourRowStep = checkColumns ? 1 : 0;
+    let neighbourColumnStep = checkColumns ? 0 : 1;
+
+    for(let i = 0;i < 4;i++) {
+        for(let j = 0;j < 3;j++) {
+            let row = checkColumns ? j : i;
+            let column = checkColumns ? i : j;
+            let currentTile = boardFields[row][column];
+            let currentValue = getBoardFieldTileValue(currentTile);
+
+            if(!(currentValue > 0)) {
+                continue;
+            }
+
+            let neighbourTile = boardFields[row + neighbourRowStep][column + neighbourColumnStep];
+            let neighbourValue = getBoardFieldTileValue(neighbourTile);
+
+            if(currentValue === neighbourValue) {
+                console.log(`see column ${column}, row ${row} is mergeable: `, currentTile, neighbourTile);
+                return false;
+            }
+        }
+    }
+
+    console.log(`No mergeable tiles found.`);
+    return true;
 }
 
 function handleGameover() {
