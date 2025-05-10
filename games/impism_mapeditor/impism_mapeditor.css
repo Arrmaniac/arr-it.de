@@ -1,0 +1,273 @@
+@font-face {
+    font-family: 'Book Antiqua';
+    src: local('Book Antiqua'), url('assets/fonts/BookAntiqua.ttf');
+}
+
+@font-face {
+    font-family: 'Book Antiqua Bold';
+    src: local('Book Antiqua Bold'), url('assets/fonts/BookAntiquaBold.ttf');
+}
+
+@font-face {
+    font-family: 'Belwe Bold BT';
+    src: local('Belwe Bold Bold'), url('assets/fonts/BelweBoldBT.ttf');
+}
+
+@font-face {
+    font-family: 'Belwe Light BT';
+    src: local('Belwe Light BT'), url('assets/fonts/BelweLightBT.ttf');
+}
+
+body {
+    font-family: 'Book Antiqua', serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Belwe Bold BT';
+}
+
+#canvas {
+    position: relative;
+    background-color: saddlebrown;
+    padding: 2px;
+    border: ridge 2px burlywood;
+}
+
+.terrain {
+    position: absolute;
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    background-image: url('assets/impism_tiles.png');
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+
+.terrain.highlighted {
+    border: solid 1px red;
+    background-color: black;
+    background-blend-mode: hard-light;
+}
+
+/* first row: */
+
+.terrain.ocean {
+    background-position: 0px 0px;
+}
+
+.terrain.clear, 
+.terrain.town, 
+.terrain.capital 
+{
+    background-position: -64px 0px;
+}
+
+.terrain.cotton {
+    background-position: -128px 0px;
+}
+
+.terrain.cattle {
+    background-position: -192px 0px;
+}
+
+.terrain.horse {
+    background-position: -256px 0px;
+}
+
+/* 2nd row: */
+
+.terrain.grain {
+    background-position: 0px -64px;
+}
+
+.terrain.orchard {
+    background-position: -64px -64px;
+}
+
+.terrain.wool {
+    background-position: -128px -64px;
+}
+
+.terrain.hill {
+    background-position: -192px -64px;
+}
+
+.terrain.mountain {
+    background-position: -256px -64px;
+}
+
+/* 3rd row: */
+
+.terrain.swamp {
+    background-position: 0px -128px;
+}
+
+.terrain.desert {
+    background-position: -64px -128px;
+}
+
+.terrain.tundra {
+    background-position: -128px -128px;
+}
+
+.terrain.forest {
+    background-position: -192px -128px;
+}
+
+/*
+.terrain.town {
+    background-position: -256px -128px;
+}
+*/
+
+/* 4th row: */
+
+.terrain.scrub-forest {
+    background-position: 0px -192px;
+}
+
+/*
+.terrain.capital {
+    background-position: -64px -192px;
+}
+*/
+
+.terrain.capital-minor {
+    background-position: -128px -192px;
+}
+
+.terrain.town-minor {
+    background-position: -192px -192px;
+}
+
+.terrain.harbour {
+    background-position: -256px -192px;
+}
+
+
+.code-view {
+    white-space: pre-wrap;
+    font-family: monospace;
+}
+
+.town-overlay {
+    pointer-events: none;
+}
+
+.resource {
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+}
+
+.resource.resource-a {
+    top: 0px;
+}
+
+.resource.resource-b {
+    top: 24px;
+}
+
+.nation-0 {
+    border-color: darkblue;
+}
+
+.nation-1 {
+    border-color: darkred;
+}
+
+.nation-2 {
+    border-color: darkviolet;
+}
+
+.nation-3 {
+    border-color: lightseagreen;
+}
+
+.nation-4 {
+    border-color: darkorange;
+}
+
+.nation-5 {
+    border-color: darkgreen;
+}
+
+.nation-6 {
+    border-color: yellow;
+}
+
+.nation-minor {
+    border-color: white;
+}
+
+.nation-border-north {
+    border-top-width: 2px;
+    border-top-style: solid;
+}
+
+.nation-border-south {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+}
+
+.nation-border-west {
+    border-left-width: 2px;
+    border-left-style: solid;
+}
+
+.nation-border-east {
+    border-right-width: 2px;
+    border-right-style: solid;
+}
+
+.province-border-north {
+    border-top-width: 1px;
+    border-top-style: dashed;
+    border-top-color: white;
+}
+
+.province-border-south {
+    border-bottom-width: 1px;
+    border-bottom-style: dashed;
+    border-bottom-color: white;
+}
+
+.province-border-west {
+    border-left-width: 1px;
+    border-left-style: dashed;
+    border-left-color: white;
+}
+
+.province-border-east {
+    border-right-width: 1px;
+    border-right-style: dashed;
+    border-right-color: white;
+}
+
+.cell-frame {
+    position: relative;
+}
+
+ul.list-type-radio {
+    list-style-type: none;
+    padding-inline-start: 1rem;
+}
+
+ul.list-type-radio > li label {
+    display: inline-block;
+    cursor: pointer;
+}
+
+ul.list-type-radio > li label:hover {
+    background-color: silver;
+}
+
+div.map-view {
+    display: flex;
+    flex-direction: column;
+}
+
+div.map-view > div {
+    display: flex;
+    justify-content: center;
+}
