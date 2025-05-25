@@ -384,7 +384,8 @@ function handleGameover() {
     let endgame = document.createElement('dialog');
     Gameboard.parentNode.append(endgame);
     endgame.innerHTML = `<h1>Game Over</h1>
-    <h2>Score: <b>${score}</b>
+    <h2>Score: <b>${score}</b></h2>
+    <a class="btn" href="">Start New Game</a>
 `;
     endgame.showModal();
 }
