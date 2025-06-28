@@ -123,7 +123,16 @@ footer {
 }
 
 table.table {
-    > tbody > tr:nth-child(1) {
+    > thead {
+        > tr { 
+            border-bottom: solid 2px black;
+            background-color: grey;
+            > th {
+                padding: 0.5em;
+            }
+        }
+    }
+    > tbody > tr:nth-child(even) {
         background-color: silver;
     }
 }

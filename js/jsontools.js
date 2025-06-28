@@ -37,7 +37,8 @@ const JsonTools = {
         let $tbody = Helper.getElement('tbody', [], $table);
 
         Headers.forEach(header => {
-            let $th = Helper.getElement('th', [], $thead);
+            let $tr = Helper.getElement('tr', [], $thead);
+            let $th = Helper.getElement('th', [], $tr);
             $th.innerText = header;
         });
 
