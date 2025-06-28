@@ -123,11 +123,12 @@ footer {
 }
 
 table.table {
+    border-collapse: collapse;
     > thead {
         > tr { 
-            border-bottom: solid 2px black;
             background-color: grey;
             > th {
+                border-bottom: solid 2px black;
                 padding: 0.5em;
             }
         }

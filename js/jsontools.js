@@ -34,11 +34,11 @@ const JsonTools = {
 
         let $table = Helper.getElement('table', ['table'], this.$ResulttableContainer, 'prepend');
         let $thead = Helper.getElement('thead', [], $table);
+        let $theadTr = Helper.getElement('tr', [], $thead);
         let $tbody = Helper.getElement('tbody', [], $table);
 
         Headers.forEach(header => {
-            let $tr = Helper.getElement('tr', [], $thead);
-            let $th = Helper.getElement('th', [], $tr);
+            let $th = Helper.getElement('th', [], $theadTr);
             $th.innerText = header;
         });
 
