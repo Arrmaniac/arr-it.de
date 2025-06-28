@@ -135,7 +135,7 @@ table.table {
     }
     > tbody {
         > tr > td {
-            padding-left: 0.25em;
+            padding: 0.12em 0.25em;
             + td {
                 border-left: dotted 1px grey;
             }
