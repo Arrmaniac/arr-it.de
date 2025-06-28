@@ -5,6 +5,33 @@ const $JsonStringSource = $JsonExtractForExcelUseContainer.querySelector('[data-
 const $ConvertFromArrayButton = $JsonExtractForExcelUseContainer.querySelector('button[data-convert-from-array-button]');
 const $ResulttableContainer = $JsonExtractForExcelUseContainer.querySelector('[data-resulttable-container]');
 
+class Column {
+    title;
+    seenTypes = new Set();
+    
+    constructor(columnTitle) {
+        this.title = columnTitle;
+    }
+    
+    #calculateButtonSign() {
+        if(this.seenTypes.size !== 1) return '<?>';
+        let firstType = [...this.seenTypes][0];
+        switch(firstType) {
+            case 'object': return '{...}';
+            case 'number': return '#';
+            case 'string': return '"..."';
+            case 'boolean': return '0|1';
+            default: return firstType;
+        }
+    }
+    
+    getThButton() {
+        let $button = Helper.getElement('button');
+        $button.innerText = this.#calculateButtonSign();
+        return $button;
+    }
+}
+
 const JsonTools = {
     $JsonExtractForExcelUseContainer,
     $JsonStringSource,
@@ -26,11 +53,17 @@ const JsonTools = {
     processArrayForExcelUse: function(jsonArray = []) {
         let Columns = jsonArray.reduce((carry, item) => {
             if(typeof item === 'object') {
-                Object.keys(item).forEach(key => carry.add(key));
+                Object.keys(item).forEach(key => {
+                    if(!carry.has(key)) {
+                        carry.set(key, new Column(key));
+                    }
+                    let column = carry.get(key);
+                    column.seenTypes.add(typeof item[key]);
+                });
             }
             return carry;
-        }, new Set());
-        let Headers = [...Columns];
+        }, new Map());
+        let Headers = [...Columns.keys()];
 
         let $table = Helper.getElement('table', ['table'], this.$ResulttableContainer, 'prepend');
         let $thead = Helper.getElement('thead', [], $table);
@@ -38,8 +71,11 @@ const JsonTools = {
         let $tbody = Helper.getElement('tbody', [], $table);
 
         Headers.forEach(header => {
+            let column = Columns.get(header);
             let $th = Helper.getElement('th', [], $theadTr);
             $th.innerText = header;
+            let $button = column.getThButton();
+            $th.append($button);
         });
 
         jsonArray.forEach(element => {
@@ -63,4 +99,4 @@ $JsonExtractForExcelUseContainer.addEventListener('click', event => {
     if(event.target === $ConvertFromArrayButton) return JsonTools.processExtractForExcelUse(event);
 });
 
-export {JsonTools};
+export {JsonTools, Column};
