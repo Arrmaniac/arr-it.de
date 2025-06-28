@@ -95,6 +95,7 @@ const JsonTools = {
                 });
             } else {
                 let $td = Helper.getElement('td', [], $tr);
+                $td.colspan = Headers.length;
                 $td.innerText = element;
             }
         });
