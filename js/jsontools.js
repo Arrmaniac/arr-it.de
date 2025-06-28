@@ -48,7 +48,7 @@ const JsonTools = {
             if(typeof element === 'object') {
                 Headers.forEach(header => {
                     let $td = Helper.getElement('td', [], $tr);
-                    let value = element[header];
+                    let value = element[header] ?? '';
                     $td.innerText =  (typeof value === 'object') ? JSON.stringify(value) : value;
                 });
             } else {
