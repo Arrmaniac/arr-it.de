@@ -1,7 +1,7 @@
 import {Helper} from '/js/arr-it-basic.js';
 
 const $JsonExtractForExcelUseContainer = document.querySelector('[data-sectioncontainer="json-extract-for-excel-use"]');
-const $JsonStringSource = $JsonExtractForExcelUseContainer.querySelector('[data-json-string-source}');
+const $JsonStringSource = $JsonExtractForExcelUseContainer.querySelector('[data-json-string-source]');
 const $ConvertFromArrayButton = $JsonExtractForExcelUseContainer.querySelector('button[data-convert-from-array-button]');
 const $ResulttableContainer = $JsonExtractForExcelUseContainer.querySelector('[data-resulttable-container]');
 
