@@ -135,5 +135,11 @@ table.table {
     }
     > tbody > tr:nth-child(even) {
         background-color: silver;
+        td {
+            padding-left: 0.25em;
+            + td {
+                border-left: dotted 1px grey;
+            }
+        }
     }
 }
