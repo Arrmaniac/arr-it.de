@@ -133,13 +133,15 @@ table.table {
             }
         }
     }
-    > tbody > tr:nth-child(even) {
-        background-color: silver;
-        td {
+    > tbody {
+        > tr > td {
             padding-left: 0.25em;
             + td {
                 border-left: dotted 1px grey;
             }
+        }
+        > tr:nth-child(even) {
+            background-color: silver;
         }
     }
 }
