@@ -32,7 +32,7 @@ const JsonTools = {
         }, new Set());
         let Headers = [...Columns];
 
-        let $table = Helper.getElement('table', [], this.$ResulttableContainer, 'prepend');
+        let $table = Helper.getElement('table', ['table'], this.$ResulttableContainer, 'prepend');
         let $thead = Helper.getElement('thead', [], $table);
         let $tbody = Helper.getElement('tbody', [], $table);
 
@@ -47,7 +47,7 @@ const JsonTools = {
             if(typeof element === 'object') {
                 Headers.forEach(header => {
                     let $td = Helper.getElement('td', [], $tr);
-                    $td.innerText = element[header];
+                    $td.innerText = element[header] ?? '';
                 });
             } else {
                 let $td = Helper.getElement('td', [], $tr);

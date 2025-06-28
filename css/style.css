@@ -121,3 +121,9 @@ footer {
     white-space: pre-wrap;
     font-family: monospace;
 }
+
+table.table {
+    > tbody > tr:nth-child(1) {
+        background-color: silver;
+    }
+}
