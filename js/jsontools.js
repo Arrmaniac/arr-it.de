@@ -52,7 +52,7 @@ const JsonTools = {
                 });
             } else {
                 let $td = Helper.getElement('td', [], $tr);
-                $td.innerText = element;
+                $td.innerText = JSON.stringify(element);
             }
         });
     }
