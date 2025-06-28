@@ -48,11 +48,12 @@ const JsonTools = {
             if(typeof element === 'object') {
                 Headers.forEach(header => {
                     let $td = Helper.getElement('td', [], $tr);
-                    $td.innerText = element[header] ?? '';
+                    let value = element[header];
+                    $td.innerText =  (typeof value === 'object') ? JSON.stringify(value) : value;
                 });
             } else {
                 let $td = Helper.getElement('td', [], $tr);
-                $td.innerText = JSON.stringify(element);
+                $td.innerText = element;
             }
         });
     }
