@@ -13,9 +13,15 @@ class Column {
         this.title = columnTitle;
     }
     
-    #calculateButtonSign() {
-        if(this.seenTypes.size !== 1) return '<?>';
+    #calculateButtonSign($button) {
+        if(this.seenTypes.size !== 1){ 
+            $button.title = 'non-unique type';
+            return '<?>';
+        }
+        
         let firstType = [...this.seenTypes][0];
+        $button.title = `type: ${firstType}`;
+        
         switch(firstType) {
             case 'object': return '{...}';
             case 'number': return '#';
@@ -27,7 +33,7 @@ class Column {
     
     getThButton() {
         let $button = Helper.getElement('button');
-        $button.innerText = this.#calculateButtonSign();
+        $button.innerText = this.#calculateButtonSign($button);
         return $button;
     }
 }

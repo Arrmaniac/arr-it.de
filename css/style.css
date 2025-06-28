@@ -132,6 +132,9 @@ table.table {
                 padding: 0.5em;
             }
         }
+        button {
+            margin: 0.12em 1em;
+        }
     }
     > tbody {
         > tr > td {
