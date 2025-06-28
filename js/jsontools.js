@@ -6,7 +6,7 @@ const $ConvertFromArrayButton = $JsonExtractForExcelUseContainer.querySelector('
 const $ResulttableContainer = $JsonExtractForExcelUseContainer.querySelector('[data-resulttable-container]');
 
 const JsonTools = {
-    processExtractForExcelUse: (event) => {
+    processExtractForExcelUse: function(event) {
         event.preventDefault();
         let jsonString = $JsonStringSource.value;
         let parsedJson = JSON.parse(jsonString);
@@ -19,7 +19,7 @@ const JsonTools = {
 
         console.log('Is NOT an Array.');
     },
-    processArrayForExcelUse: (jsonArray = []) => {
+    processArrayForExcelUse: function(jsonArray = []) {
         let Columns = jsonArray.reduce((carry, item) => {
             if(typeof item === 'object') {
                 Object.keys(item).forEach(key => carry.add(key));
