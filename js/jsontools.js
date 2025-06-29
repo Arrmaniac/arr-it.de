@@ -51,7 +51,7 @@ const JsonTools = {
 
         if(Array.isArray(parsedJson)) {
             console.log('Is an Array.');
-            jsonObject = {table1: parsedJson};
+            let jsonObject = {table1: parsedJson};
             return this.processObjectForExcelUse(jsonObject);
         } else if (Object.keys(parsedJson).length > 0) {
             return this.processObjectForExcelUse(parsedJson);
