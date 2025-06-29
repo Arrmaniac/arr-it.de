@@ -14,22 +14,10 @@
         <link href="/css/style.css" rel="stylesheet" />
         <script src="/js/jsontools.js" type="module"></script>
     </head>
-    <body>
+    <body class="hero">
 <header>
     <div class="container">
         <h1 class="page-title">arr-it.de JSON-Tools</h1>
-    </div>
-    <div class="hero d-none">
-        <div class="container">
-            <h2 class="hero-title">...hat bestimmt nichts mit IT zu tun...</h2>
-            <p>
-Bei arr-it.de dreht sich alles um Webtechnologien und um deren Einsatz im 
-Allgemeinen und speziell im eCommerce. Verschiedene Anwendungen haben 
-unterschiedliche Ansprüche an Ressourcen, Umsetzung und Betrieb. Hier wird 
-darüber reflektiert und musiert. Es wird also immer wieder Neues (oder das, was 
-für den Autor neu ist) ausprobiert. 
-            </p>
-        </div>
     </div>
 </header>
 <main>
@@ -37,20 +25,20 @@ für den Autor neu ist) ausprobiert.
         <div class="container" data-sectioncontainer="json-extract-for-excel-use">
             <h2 class="section-title">JSON extract for Excel Use</h2>
             <p>
-Enter a valid JSON document, either an array or an Object with arrays as properties will
+Enter a valid JSON document. Either an array or an Object with arrays as properties will
 be converted.
 <br />
-A single array will be converted into an unnamed table.
-<br />
-An object with properties will be converted into a list of named tables - where the 
-property-name will be used as the name for the respective table. Still only arrays 
-can be converted to tables.
+A single array will be converted into an unnamed table. An object with properties 
+will be converted into a list of named tables - where the property-name will be 
+used as the name for the respective table. Still only arrays can be converted to tables.
 <br/>
 Everything else will not be converted, instead it will be printed as stringified JSON.
+Inside table-cells, sub-documents are stringified as well.
+
             </p>
-            <div style="display: flex; flex-direction: row;">
+            <div style="display: flex; flex-direction: column;">
                 <div>
-                    <textarea cols="30" rows="20" data-json-string-source></textarea>
+                    <textarea cols="30" rows="20" style="width: 100%" data-json-string-source></textarea>
                 </div>
                 <div style="display: flex; flex-direction: column;">
                     <button data-convert-from-array-button>convert from Array</button>

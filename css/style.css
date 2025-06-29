@@ -64,6 +64,10 @@ img {
     background-size: cover;
 }
 
+body.hero {
+    padding: unset;
+}
+
 @media(orientation: portrait) {
     .hero {
         padding: 3em 0;
