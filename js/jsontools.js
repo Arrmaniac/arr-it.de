@@ -60,7 +60,7 @@ const JsonTools = {
         console.log('Is NOT an Array.');
     },
     processObjectForExcelUse: function(jsonObject) {
-        let $ul = Helper.getElement('ul', [], this.$ResulttableContainer, 'prepend');
+        let $ul = Helper.getElement('ul', ['bg-white'], this.$ResulttableContainer, 'prepend');
         let self = this;
         Object.entries(jsonObject).forEach(([key, value]) => {
             let $li = Helper.getElement('li', [], $ul);
@@ -92,7 +92,7 @@ const JsonTools = {
         }, new Map());
         let Headers = [...Columns.keys()];
 
-        let $table = Helper.getElement('table', ['table', 'bg-white'], $parentNode, appendMode);
+        let $table = Helper.getElement('table', ['table'], $parentNode, appendMode);
         let $thead = Helper.getElement('thead', [], $table);
         let $theadTr = Helper.getElement('tr', [], $thead);
         let $tbody = Helper.getElement('tbody', [], $table);

@@ -124,6 +124,7 @@ footer {
 .code-view {
     white-space: pre-wrap;
     font-family: monospace;
+    text-align: start;
 }
 
 table.table {
