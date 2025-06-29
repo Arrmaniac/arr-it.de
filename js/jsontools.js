@@ -62,7 +62,7 @@ const JsonTools = {
     processObjectForExcelUse: function(jsonObject) {
         let $ul = Helper.getElement('ul', [], this.$ResulttableContainer, 'prepend');
         let self = this;
-        jsonObject.entries(([key, value]) => {
+        Object.entries(jsonObject).forEach(([key, value]) => {
             let $li = Helper.getElement('li', [], $ul);
             let $details = Helper.getElement('details', [], $li);
             let $summary = Helper.getElement('summary', [], $details);
