@@ -51,12 +51,33 @@ const JsonTools = {
 
         if(Array.isArray(parsedJson)) {
             console.log('Is an Array.');
-            return this.processArrayForExcelUse(parsedJson);
+            jsonObject = {table1: parsedJson};
+            return this.processObjectForExcelUse(jsonObject);
+        } else if (Object.keys(parsedJson).length > 0) {
+            return this.processObjectForExcelUse(parsedJson);
         }
 
         console.log('Is NOT an Array.');
     },
-    processArrayForExcelUse: function(jsonArray = []) {
+    processObjectForExcelUse: function(jsonObject) {
+        let $ul = Helper.getElement('ul', [], this.$ResulttableContainer, 'prepend');
+        let self = this;
+        jsonObject.entries(([key, value]) => {
+            let $li = Helper.getElement('li', [], $ul);
+            let $details = Helper.getElement('details', [], $li);
+            let $summary = Helper.getElement('summary', [], $details);
+            $summary.innerText = `Table: "${key}"`;
+            if(Array.isArray(value)) {
+                $details.setAttribute('open', true);
+                self.processArrayForExcelUse(value, $details);
+            } else {
+                $summary.innerText += ` (not an array)`;
+                let $pre = Helper.getElement('pre', ['code-view'], $details);
+                $pre.innerText = JSON.stringify(value, null, "  ");
+            }
+        });
+    },
+    processArrayForExcelUse: function(jsonArray = [], $parentNode, appendMode = 'append') {
         let Columns = jsonArray.reduce((carry, item) => {
             if(typeof item === 'object') {
                 Object.keys(item).forEach(key => {
@@ -71,7 +92,7 @@ const JsonTools = {
         }, new Map());
         let Headers = [...Columns.keys()];
 
-        let $table = Helper.getElement('table', ['table'], this.$ResulttableContainer, 'prepend');
+        let $table = Helper.getElement('table', ['table'], $parentNode, appendMode);
         let $thead = Helper.getElement('thead', [], $table);
         let $theadTr = Helper.getElement('tr', [], $thead);
         let $tbody = Helper.getElement('tbody', [], $table);
