@@ -100,14 +100,9 @@ const JsonTools = {
             }
         });
     },
-    asteriskExtract: function(item) {
-        let asteriskPattern = new RegExp(/^(\[\*\])|\*$/);
-        if(asteriskPattern.exec(item)) {
-
-        }        
-    },
     jsonExtractRecursive: function(targetValue, jsonPathResidual = []) {
         let pathStop = jsonPathResidual.shift();
+        console.debug(`pathStop`, pathStop, `jsonPathResidual`, jsonPathResidual, `targetValue`, targetValue);
 
         if((typeof pathStop === "undefined") || (pathStop === null)) {
             return targetValue;
@@ -116,10 +111,18 @@ const JsonTools = {
         }
         
         let asteriskPattern = new RegExp(/^(\[\*\])|\*$/);
-        if(asteriskPattern.exec(targetValue)) {
+        if(asteriskPattern.exec(pathStop)) {
+            //console.log(`found asterisk-pattern`);
             //@todo typeof targetValue === 'string' produces funny outcomes here...
             return Object.values(targetValue).map(element => this.jsonExtractRecursive(element, jsonPathResidual));
         }        
+        
+        let multiTokenBracketPattern = new RegExp(/^\[("|')([^,]+)\1(,\1([^,]+)\1)+\]$/);
+        if(multiTokenBracketPattern.exec(pathStop)) {
+            console.debug(`found multiTokenBracketPattern`, multiTokenBracketPattern, RegExp);
+            let subPaths = pathStop.split(/[\[\],"']+/).filter(item => item.match(/\w/));
+            return subPaths.map(key => this.jsonExtractRecursive(targetValue[key], jsonPathResidual));
+        }
         
         //let targetIsArray = Array.isArray(targetValue);
         let simpleBracketPattern = new RegExp(/^\[("|')([^,]+)\1\]$/);
