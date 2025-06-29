@@ -99,6 +99,74 @@ const JsonTools = {
                 $td.innerText = element;
             }
         });
+    },
+    asteriskExtract: function(item) {
+        let asteriskPattern = new RegExp(/^(\[\*\])|\*$/);
+        if(asteriskPattern.exec(item)) {
+
+        }        
+    },
+    jsonExtractRecursive: function(targetValue, jsonPathResidual = []) {
+        let pathStop = jsonPathResidual.shift();
+
+        if((typeof pathStop === "undefined") || (pathStop === null)) {
+            return targetValue;
+        } else if (pathStop === '$') {
+            return this.jsonExtractRecursive(targetValue, jsonPathResidual);
+        }
+        
+        let asteriskPattern = new RegExp(/^(\[\*\])|\*$/);
+        if(asteriskPattern.exec(targetValue)) {
+            //@todo typeof targetValue === 'string' produces funny outcomes here...
+            return Object.values(targetValue).map(element => this.jsonExtractRecursive(element, jsonPathResidual));
+        }        
+        
+        //let targetIsArray = Array.isArray(targetValue);
+        let simpleBracketPattern = new RegExp(/^\[("|')([^,]+)\1\]$/);
+        let simpleArrayPattern = new RegExp(/^\[(\d+)\]$/);
+        
+        if(simpleBracketPattern.exec(pathStop)) {
+            pathStop = RegExp.$2;
+        } else if (simpleArrayPattern.exec(pathStop)) {
+            pathStop = parseInt(RegExp.$1);
+        }
+        
+        return this.jsonExtractRecursive(targetValue[pathStop], jsonPathResidual);
+    },
+    jsonExtract: function(jsonString, jsonPath = '', returnStringified = false) {
+        let parsedJSON = JSON.parse(jsonString);
+        let jsonPathList = jsonPath.split(/(\.)|(?=\[)/)
+                .filter(pathStop => (typeof pathStop !== "undefined") && (pathStop !== null) && (pathStop !== '$') && (pathStop !== '.'));
+        let targetValue = this.jsonExtractRecursive(parsedJSON, jsonPathList);
+        
+        if(returnStringified) {
+            return JSON.stringify(targetValue);
+        }
+
+        return targetValue;
+    },
+    classicalJsonExtract: function(jsonString, jsonPath = '', returnStringified = false) {
+        let parsedJSON = JSON.parse(jsonString);
+        let targetValue = jsonPath.split(/(\.)|(?=\[)/).reduce((carry,item) => {
+            if((typeof item === "undefined") || (item === null) || (item === '$') || (item === '.')) return  carry;
+
+            let normalPattern = new RegExp(/^\['(.+)'\]$/);
+            let arrayPattern = new RegExp(/^\[(\d+)\]$/);
+            
+            if(normalPattern.exec(item)) {
+                item = RegExp.$1;
+            } else if (arrayPattern.exec(item)) {
+                item = parseInt(RegExp.$1);
+            }
+
+            return carry[item];
+        }, parsedJSON);
+
+        if(returnStringified) {
+            return JSON.stringify(targetValue);
+        }
+
+        return targetValue;
     }
 };
 
