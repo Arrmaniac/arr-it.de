@@ -152,3 +152,7 @@ table.table {
         }
     }
 }
+
+.bg-white {
+    background-color: white;
+}
