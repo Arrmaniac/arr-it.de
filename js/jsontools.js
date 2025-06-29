@@ -47,7 +47,7 @@ const JsonTools = {
         event.preventDefault();
         let jsonString = this.$JsonStringSource.value;
         let parsedJson = JSON.parse(jsonString);
-        console.log(parsedJson);
+        console.debug(parsedJson);
 
         if(Array.isArray(parsedJson)) {
             console.log('Is an Array.');
@@ -69,6 +69,7 @@ const JsonTools = {
             $summary.innerText = `Table: "${key}"`;
             if(Array.isArray(value)) {
                 $details.setAttribute('open', true);
+                console.log(`Table: "${key}":`, value);
                 self.processArrayForExcelUse(value, $details);
             } else {
                 $summary.innerText += ` (not an array)`;
@@ -91,6 +92,7 @@ const JsonTools = {
             return carry;
         }, new Map());
         let Headers = [...Columns.keys()];
+        console.log(`identified columns: `, Columns);
 
         let $table = Helper.getElement('table', ['table', 'bg-white'], $parentNode, appendMode);
         let $thead = Helper.getElement('thead', [], $table);
