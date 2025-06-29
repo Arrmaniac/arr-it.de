@@ -36,16 +36,24 @@ für den Autor neu ist) ausprobiert.
     <section>
         <div class="container" data-sectioncontainer="json-extract-for-excel-use">
             <h2 class="section-title">JSON extract for Excel Use</h2>
+            <p>
+Enter a valid JSON document, either an array or an Object with arrays as properties will
+be converted.
+<br />
+A single array will be converted into an unnamed table.
+<br />
+An object with properties will be converted into a list of named tables - where the 
+property-name will be used as the name for the respective table. Still only arrays 
+can be converted to tables.
+<br/>
+Everything else will not be converted, instead it will be printed as stringified JSON.
+            </p>
             <div style="display: flex; flex-direction: row;">
                 <div>
-                    <textarea cols="20" rows="10" data-json-string-source></textarea>
+                    <textarea cols="30" rows="20" data-json-string-source></textarea>
                 </div>
                 <div style="display: flex; flex-direction: column;">
                     <button data-convert-from-array-button>convert from Array</button>
-                    <button>convert to Hex</button>
-                </div>
-                <div>
-                    <textarea cols="20" rows="10"></textarea>
                 </div>
             </div>
             <div data-resulttable-container class="code-view"></div>
