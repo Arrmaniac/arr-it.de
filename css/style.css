@@ -157,3 +157,7 @@ table.table {
 .bg-white {
     background-color: white;
 }
+
+.user-select-none {
+    user-select: none;
+}

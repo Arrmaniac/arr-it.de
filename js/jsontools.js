@@ -32,7 +32,7 @@ class Column {
     }
     
     getThButton() {
-        let $button = Helper.getElement('button');
+        let $button = Helper.getElement('button', ['user-select-none']);
         $button.innerText = this.#calculateButtonSign($button);
         return $button;
     }
