@@ -22,11 +22,12 @@
 
 body {
     background: no-repeat center center fixed; 
+    background-color: var(--color-lightgrey-1);
     background-image: url(../assets/backgrounds/City_Birdseyeview.1920x1280.png), url(../assets/backgrounds/City_Birdseyeview.1920x1280_low.jpg) ;
 }
 
 header {
-    padding: 2em;
+    padding: 1em;
     text-align: center;
     background-color: var(--color-macchiato);
 }
@@ -40,7 +41,6 @@ header > h1 {
     font-family: 'EagleLake', serif;
     font-size: 400%;
     letter-spacing: 0.5em;
-    color: var(--color-dark-oak-brown);
 }
 
 header > h1 + h2 {
