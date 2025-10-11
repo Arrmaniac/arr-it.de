@@ -12,11 +12,11 @@
     --color-dark-oak-brown: rgb(87, 65, 33);
     --color-sky-grey: rgb(182, 188, 177);
     
-    @font-face {font-family: 'EagleLake'; src: url(../assets/fonts/EagleLake-Regular.ttf) format('woff2');}
-    @font-face {font-family: CormorantUnicase; font-weight: lighter; src: url(../assets/fonts/CormorantUnicase-Light.ttf);}
-    @font-face {font-family: CormorantUnicase; font-weight: normal; src: url(../assets/fonts/CormorantUnicase-Regular.ttf);}
-    @font-face {font-family: CormorantUnicase; font-weight: bold; src: url(../assets/fonts/CormorantUnicase-SemiBold.ttf);}
-    @font-face {font-family: CormorantUnicase; font-weight: bolder; src: url(../assets/fonts/CormorantUnicase-Bold.ttf);}
+    @font-face {font-family: 'EagleLake'; src: url('../assets/fonts/EagleLake-Regular.ttf') format('woff2');}
+    @font-face {font-family: 'CormorantUnicase'; font-weight: lighter; src: url('../assets/fonts/CormorantUnicase-Light.ttf');}
+    @font-face {font-family: 'CormorantUnicase'; font-weight: normal; src: url('../assets/fonts/CormorantUnicase-Regular.ttf');}
+    @font-face {font-family: 'CormorantUnicase'; font-weight: bold; src: url('../assets/fonts/CormorantUnicase-SemiBold.ttf');}
+    @font-face {font-family: 'CormorantUnicase'; font-weight: bolder; src: url('../assets/fonts/CormorantUnicase-Bold.ttf');}
 }
 
 body {
@@ -25,11 +25,11 @@ body {
 }
 
 header > h1 {
-    font-family: 'EagleLake';
+    font-family: 'EagleLake', serif;
     font-size: 400%;
 }
 
 header > h1 + h2 {
-    font-family: CormorantUnicase;
+    font-family: 'CormorantUnicase', sans-serif;
     font-weight: bolder;
 }
