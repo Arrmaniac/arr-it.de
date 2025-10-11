@@ -12,7 +12,7 @@
     --color-dark-oak-brown: rgb(87, 65, 33);
     --color-sky-grey: rgb(182, 188, 177);
     
-    @font-face {font-family: EagleLake; src: url(assets/fonts/EagleLake-Regular.ttf);}
+    @font-face {font-family: 'EagleLake'; src: url(assets/fonts/EagleLake-Regular.ttf) format('woff2');}
     @font-face {font-family: CormorantUnicase; font-weight: lighter; src: url(assets/fonts/CormorantUnicase-Light.ttf);}
     @font-face {font-family: CormorantUnicase; font-weight: normal; src: url(assets/fonts/CormorantUnicase-Regular.ttf);}
     @font-face {font-family: CormorantUnicase; font-weight: bold; src: url(assets/fonts/CormorantUnicase-SemiBold.ttf);}
@@ -21,11 +21,11 @@
 
 body {
     background: no-repeat center center fixed; 
-    background-image: url(assets/background/City_Birdseyeview.1920x1280.png), url(assets/background/City_Birdseyeview.1920x1280_low.jpg) ;
+    background-image: url(assets/backgrounds/City_Birdseyeview.1920x1280.png), url(assets/backgrounds/City_Birdseyeview.1920x1280_low.jpg) ;
 }
 
 header > h1 {
-    font-family: EagleLake;
+    font-family: 'EagleLake';
     font-size: 400%;
 }
 
