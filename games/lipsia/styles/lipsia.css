@@ -51,3 +51,11 @@ header > h1 + h2 {
     color: var(--color-warm-brown);
     text-shadow: 0 0 10px var(--color-darkbrown-2);
 }
+
+header > div#heraldic_shield {
+    display: inline-block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    
+}
