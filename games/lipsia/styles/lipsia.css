@@ -12,7 +12,7 @@
     --color-darkbrown-1: rgb(60, 29, 6);
     --color-lightgrey-1: rgb(208, 201, 178);
     --color-mud-grey-brown: rgb(120, 96, 63);
-    --color-warm-brown: rgb(120, 96, 63);
+    --color-warm-brown: rgb(92, 57, 17);
     --color-warm-light-brown: rgb(131, 91, 43);
     --color-light-grey-brown: rgb(131, 91, 43);
     --color-light-yellow-brown: rgb(192, 144, 75);
@@ -25,12 +25,29 @@ body {
     background-image: url(../assets/backgrounds/City_Birdseyeview.1920x1280.png), url(../assets/backgrounds/City_Birdseyeview.1920x1280_low.jpg) ;
 }
 
+header {
+    padding: 2em;
+    text-align: center;
+    background-color: var(--color-macchiato);
+}
+
+header > * {
+    display: inline-block;
+    margin-block: 0;
+    white-space: pre;
+}
+
 header > h1 {
     font-family: 'EagleLake', serif;
     font-size: 400%;
+    letter-spacing: 0.5em;
+    color: var(--color-dark-oak-brown);
 }
 
 header > h1 + h2 {
     font-family: 'CormorantUnicase', sans-serif;
     font-weight: bolder;
+    margin-top: -1em;
+    color: var(--color-warm-brown);
+    text-shadow: 0 0 10px var(--color-darkbrown-2);
 }
