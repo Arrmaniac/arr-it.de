@@ -58,4 +58,8 @@ header > div#heraldic_shield {
     bottom: 0;
     left: 0;
     
+    img {
+        width: clamp(5vw, 480px, 50vw);
+    }
+    
 }
