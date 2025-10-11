@@ -39,12 +39,13 @@ header > * {
 
 header > h1 {
     font-family: 'EagleLake', serif;
-    font-size: 400%;
+    font-size: clamp(3em, 5em, 5vw);
     letter-spacing: 0.5em;
 }
 
 header > h1 + h2 {
     font-family: 'CormorantUnicase', sans-serif;
+    font-size: clamp(1em, 1.5em, 5vw);
     font-weight: bolder;
     margin-top: -1em;
     color: var(--color-warm-brown);
