@@ -12,11 +12,11 @@
     --color-dark-oak-brown: rgb(87, 65, 33);
     --color-sky-grey: rgb(182, 188, 177);
     
-    @font-face {font-family: 'EagleLake'; src: url('../assets/fonts/EagleLake-Regular.ttf') format('woff2');}
-    @font-face {font-family: 'CormorantUnicase'; font-weight: lighter; src: url('../assets/fonts/CormorantUnicase-Light.ttf');}
-    @font-face {font-family: 'CormorantUnicase'; font-weight: normal; src: url('../assets/fonts/CormorantUnicase-Regular.ttf');}
-    @font-face {font-family: 'CormorantUnicase'; font-weight: bold; src: url('../assets/fonts/CormorantUnicase-SemiBold.ttf');}
-    @font-face {font-family: 'CormorantUnicase'; font-weight: bolder; src: url('../assets/fonts/CormorantUnicase-Bold.ttf');}
+    @font-face {font-family: 'EagleLake'; src: url('/games/lipsia/assets/fonts/EagleLake-Regular.ttf') format('truetype');}
+    @font-face {font-family: 'CormorantUnicase'; font-weight: lighter; src: url('/games/lipsia/assets/fonts/CormorantUnicase-Light.ttf') format('truetype');}
+    @font-face {font-family: 'CormorantUnicase'; font-weight: normal; src: url('/games/lipsia/assets/fonts/CormorantUnicase-Regular.ttf') format('truetype');}
+    @font-face {font-family: 'CormorantUnicase'; font-weight: bold; src: url('/games/lipsia/assets/fonts/CormorantUnicase-SemiBold.ttf') format('truetype');}
+    @font-face {font-family: 'CormorantUnicase'; font-weight: bolder; src: url('/games/lipsia/assets/fonts/CormorantUnicase-Bold.ttf') format('truetype');}
 }
 
 body {
