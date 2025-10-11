@@ -1,0 +1,35 @@
+:root {
+    --color-macchiato : rgb(187, 143, 82); 
+    --color-darkbrown-3: rgb(27, 20, 8);
+    --color-darkbrown-2: rgb(52, 35, 13);
+    --color-darkbrown-1: rgb(60, 29, 6);
+    --color-lightgrey-1: rgb(208, 201, 178);
+    --color-mud-grey-brown: rgb(120, 96, 63);
+    --color-warm-brown: rgb(120, 96, 63);
+    --color-warm-light-brown: rgb(131, 91, 43);
+    --color-light-grey-brown: rgb(131, 91, 43);
+    --color-light-yellow-brown: rgb(192, 144, 75);
+    --color-dark-oak-brown: rgb(87, 65, 33);
+    --color-sky-grey: rgb(182, 188, 177);
+    
+    @font-face {font-family: EagleLake; src: url(assets/fonts/EagleLake-Regular.ttf);}
+    @font-face {font-family: CormorantUnicase; font-weight: lighter; src: url(assets/fonts/CormorantUnicase-Light.ttf);}
+    @font-face {font-family: CormorantUnicase; font-weight: normal; src: url(assets/fonts/CormorantUnicase-Regular.ttf);}
+    @font-face {font-family: CormorantUnicase; font-weight: bold; src: url(assets/fonts/CormorantUnicase-SemiBold.ttf);}
+    @font-face {font-family: CormorantUnicase; font-weight: bolder; src: url(assets/fonts/CormorantUnicase-Bold.ttf);}
+}
+
+body {
+    background: no-repeat center center fixed; 
+    background-image: url(assets/background/City_Birdseyeview.1920x1280.png), url(assets/background/City_Birdseyeview.1920x1280_low.jpg) ;
+}
+
+header > h1 {
+    font-family: EagleLake;
+    font-size: 400%;
+}
+
+header > h1 + h2 {
+    font-family: CormorantUnicase;
+    font-weight: bolder;
+}
