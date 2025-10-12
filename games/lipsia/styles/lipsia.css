@@ -79,6 +79,7 @@ header > h1 + h2 {
     
     &.slider-in > *:not(.slider-button) {
         display: none;
+        padding: 0;
     }
 }
 
