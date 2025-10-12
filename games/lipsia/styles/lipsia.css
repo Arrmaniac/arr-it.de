@@ -21,9 +21,11 @@
 }
 
 body {
-    background: no-repeat center center fixed; 
+    background-size: cover;
+    background-position: center center; 
+    background-attachment: fixed;
     background-color: var(--color-lightgrey-1);
-    background-image: url(../assets/backgrounds/City_Birdseyeview.1920x1280.png), url(../assets/backgrounds/City_Birdseyeview.1920x1280_low.jpg) ;
+    background-image: url('/games/lipsia/assets/backgrounds/City_Birdseyeview.1920x1280.png'), url('/games/lipsia/assets/backgrounds/City_Birdseyeview.1920x1280_low.jpg') ;
 }
 
 header {
