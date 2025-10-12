@@ -4,7 +4,7 @@ $fullscreenTrigger.addEventListener('click', async event => {
     if(event.target.dataset.fullscreenTriggerStatus === 'off') {
         document.body.requestFullscreen().then(data => {
             event.target.dataset.fullscreenTriggerStatus = 'on';
-            screen.orientation.lock('landscape-primary').catch(error => {console.warn(error); alert(error);});
+            return screen.orientation.lock('landscape-primary').catch(error => {console.warn(error);});
         });
     } else {
         document.exitFullscreen().then(data => {
