@@ -37,6 +37,7 @@ header {
 header > * {
     margin-block: 0;
     white-space: pre;
+    position: relative;
 }
 
 header > h1 {
@@ -64,4 +65,24 @@ header > div#heraldic_shield {
         width: clamp(5vw, 480px, 50vw);
     }
     
+}
+
+.slider-button {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: clamp(2em, 100px, 5vw);
+    bottom: -50px;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    
+    .slider-position-out {
+        background-image: url('/games/lipsia/assets/images/roundal_in.100x100.png');
+    }
+    
+    .slider-position-in {
+        background-image: url('/games/lipsia/assets/images/roundal_out.100x100.png');
+    }
 }
