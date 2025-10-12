@@ -31,7 +31,10 @@ main {
 }
 
 header {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     padding: 1em;
     text-align: center;
     background-color: var(--color-macchiato);
@@ -64,7 +67,9 @@ header > h1 + h2 {
     left: 0;
     
     img {
-        width: clamp(5vw, 320px, 25vw);
+        aspect-ratio: 1 / 1;
+        max-width: 25vw;
+        max-height: 25vh;
     }
     
 }
