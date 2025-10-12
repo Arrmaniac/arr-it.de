@@ -67,6 +67,14 @@ header > div#heraldic_shield {
     
 }
 
+.slider {
+    position: relative;
+    
+    &.slider-in > *:not(.slider-button) {
+        display: none;
+    }
+}
+
 .slider-button {
     display: inline-block;
     width: 50px;
