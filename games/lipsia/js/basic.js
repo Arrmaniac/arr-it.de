@@ -1,7 +1,8 @@
 const $fullscreenTrigger = document.querySelector('.heraldic-shield > img');
 
 try {
-    screen.orientation.lock('landscape');
+    alert(screen.orientation.type);
+    screen.orientation.lock('landscape-primary');
 } catch(error) {
     console.warn(error);
 }
