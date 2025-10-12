@@ -69,14 +69,28 @@ header > div#heraldic_shield {
 
 .slider-button {
     display: inline-block;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     position: absolute;
-    left: clamp(2em, 100px, 5vw);
-    bottom: -50px;
-    background-attachment: fixed;
-    background-position: center center;
+    left: clamp(2em, 50px, 5vw);
+    bottom: -25px;
+    background-color: transparent;
+    background-origin: border-box;
+    background-repeat: no-repeat;
+    background-position: top left;
     background-size: cover;
+    
+    &.slider-orientation-down {
+        transform: rotate(180deg);
+    }
+    
+    &.slider-orientation-left {
+        transform: rotate(90deg);
+    }
+    
+    &.slider-orientation-right {
+        transform: rotate(-90deg);
+    }
     
     &.slider-position-out {
         background-image: url('/games/lipsia/assets/images/roundal_in.100x100.png');
