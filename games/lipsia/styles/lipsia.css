@@ -29,6 +29,7 @@ body {
 }
 
 header {
+    position: relative;
     padding: 1em;
     text-align: center;
     background-color: var(--color-macchiato);
@@ -37,7 +38,6 @@ header {
 header > * {
     margin-block: 0;
     white-space: pre;
-    position: relative;
 }
 
 header > h1 {
@@ -78,11 +78,11 @@ header > div#heraldic_shield {
     background-position: center center;
     background-size: cover;
     
-    .slider-position-out {
+    &.slider-position-out {
         background-image: url('/games/lipsia/assets/images/roundal_in.100x100.png');
     }
     
-    .slider-position-in {
+    &.slider-position-in {
         background-image: url('/games/lipsia/assets/images/roundal_out.100x100.png');
     }
 }
