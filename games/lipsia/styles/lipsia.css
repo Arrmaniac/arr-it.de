@@ -20,7 +20,9 @@
     --color-sky-grey: rgb(182, 188, 177);
 }
 
-body {
+main {
+    position: relative;
+    block-size: 100%;
     background-size: cover;
     background-position: center center; 
     background-attachment: fixed;
@@ -33,6 +35,7 @@ header {
     padding: 1em;
     text-align: center;
     background-color: var(--color-macchiato);
+    z-index: 1000;
 }
 
 header > * {
