@@ -12,7 +12,7 @@ $fullscreenTrigger.addEventListener('click', async event => {
             event.target.dataset.fullscreenTriggerStatus = 'on';
         });
     } else {
-        document.body.exitFullscreen().then(data => {
+        document.exitFullscreen().then(data => {
             event.target.dataset.fullscreenTriggerStatus = 'off';
         });
     }
