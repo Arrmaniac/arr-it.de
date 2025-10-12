@@ -1,11 +1,6 @@
 const $fullscreenTrigger = document.querySelector('.heraldic-shield > img');
 
-try {
-    alert(screen.orientation.type);
-    screen.orientation.lock('landscape-primary');
-} catch(error) {
-    console.warn(error);
-}
+screen.orientation.lock('landscape-primary').catch(error => {console.warn(error); alert(error);});
 
 $fullscreenTrigger.addEventListener('click', async event => {
     if(event.target.dataset.fullscreenTriggerStatus === 'off') {
