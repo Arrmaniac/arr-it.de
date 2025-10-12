@@ -74,16 +74,13 @@ header > div#heraldic_shield {
     position: absolute;
     left: clamp(2em, 50px, 5vw);
     bottom: -25px;
+    border: none;
+    cursor: pointer;
     background-color: transparent;
     background-origin: border-box;
     background-repeat: no-repeat;
     background-position: top left;
     background-size: cover;
-    
-    & button {
-        border: none;
-        cursor: pointer;
-    }
     
     &.slider-orientation-down {
         transform: rotate(180deg);
