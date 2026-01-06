@@ -50,6 +50,16 @@ const resources = {
     "255":	"no resource"
 };
 
+const nations = {
+    "0": "darkblue (0)",
+    "1": "darkred (1)",
+    "2": "darkviolet (2)",
+    "3": "lightseagrean (3)",
+    "4": "darkorange(4)",
+    "5": "darkgreen (5)",
+    "6": "yellow (6)"
+};
+
 const knownMapCapitalIdentifiers = [33,35]; //supposedly only 35
 const kownSavegameCapitalIdentifiers = [41,53,61,63];
 const knownSavegameTownIdentifiers = [34,38,42,62,54,50,58];
@@ -73,14 +83,12 @@ const Helper = {
 
 
 
-//https://ptsc.markement.com/Pixi/apps/UploadShipcodes
-//let picker = document.getElementById('SendungShipcodeFileInput')
 let picker = document.getElementById('scenariomapfile');
 let canvas = document.getElementById('canvas');
 let uintArray;
 let processedMap = [];
 let fileOffset = 0; // '0' => map-file, >0 => savegame-file
-let fileMode = 'map;' //or 'savegame'
+let fileMode = 'map'; //or 'savegame'
 let numChangedCells = 0;
 
 const wellknown_europe_northwest = {
@@ -197,6 +205,7 @@ class Cell {
     x = 0;
     y = 0;
     paintedCell;
+    resourceDoubled = false;
 
     constructor(payload, byteIndex, x, y) {
         this.payload = payload;
@@ -410,6 +419,12 @@ class Cell {
 
         repaintCell(this);
         numChangedCells++;
+    }
+    
+    doubleResource(overrideB = false) {
+        if(this.payload[18] !== 255 && !overrideB) return;
+        this.changeResource('b',this.ResourceA, this.payload[17]);
+        this.resourceDoubled = true;
     }
 
     getNeighbour(direction) {
@@ -688,6 +703,26 @@ function getCleanPaintedCellClone(cell, removeHighlight = true) {
     return clonedPaintedCell;
 }
 
+/**
+ * 
+ * @param {Cell} cell
+ * @param {int|null} countryId
+ * @param {string} direction
+ * @returns {void}
+ */
+function doubleAllCountryResources(cell, countryId = null, direction = 'start') {
+    if(countryId !== null && cell.NationOrSeazone !== countryId) return;
+    if(cell.resourceDoubled) return;
+    
+    cell.doubleResource();
+    if(['start', 'NW', 'NE'].indexOf(direction) > -1) doubleAllCountryResources(cell.getNeighbour('NW'), cell.NationOrSeazone, 'NW');
+    if(['start', 'NE', 'NW'].indexOf(direction) > -1) doubleAllCountryResources(cell.getNeighbour('NE'), cell.NationOrSeazone, 'NE');
+    if(['start', 'W', 'SW', 'NW'].indexOf(direction) > -1)  doubleAllCountryResources(cell.getNeighbour('W'), cell.NationOrSeazone, 'W');
+    if(['start', 'E', 'SE', 'NE'].indexOf(direction) > -1)  doubleAllCountryResources(cell.getNeighbour('E'), cell.NationOrSeazone, 'E');
+    if(['start','SW', 'SE'].indexOf(direction) > -1) doubleAllCountryResources(cell.getNeighbour('SW'), cell.NationOrSeazone, 'SW');
+    if(['start','SE', 'SW'].indexOf(direction) > -1) doubleAllCountryResources(cell.getNeighbour('SE'), cell.NationOrSeazone, 'SE');
+}
+
 const terrainDialog = Helper.getElement('dialog', null, document.body);
 
 /*
@@ -750,14 +785,17 @@ canvas.addEventListener('click', event => {
     sameRow.append(getCleanPaintedCellClone(cell.getNeighbour('E')));
     southRow.append(getCleanPaintedCellClone(cell.getNeighbour('SW')));
     southRow.append(getCleanPaintedCellClone(cell.getNeighbour('SE')));
-
+    
+    let countryView = Helper.getElement('li', null, actionList);
+    countryView.innerHTML = `<details><summary>Country</summary><div data-details><button data-double-resources-button>Double all Country's resources</button></div></details>`;
 
     terrainDialog.showModal();
 }, true);
 
 terrainDialog.addEventListener('click', event => {
+    let cell = processedMap.at(terrainDialog.dataset.y).at(terrainDialog.dataset.x);
+    
     if(event.target.matches('[data-button-close]')) {
-        let cell = processedMap.at(terrainDialog.dataset.y).at(terrainDialog.dataset.x);
         cell.paintedCell.classList.remove('highlighted');
         terrainDialog.close();
         return;
@@ -772,7 +810,6 @@ terrainDialog.addEventListener('click', event => {
 
         if(checkedOption === originalOption) return;
 
-        let cell = processedMap.at(terrainDialog.dataset.y).at(terrainDialog.dataset.x);
         cell.changeResource(resourceType, checkedOption.dataset.resourceName, checkedOption.value);
         let cellFrame = terrainDialog.querySelector('[data-cell-frame]');
         cellFrame.innerHTML = ``;
@@ -786,6 +823,10 @@ terrainDialog.addEventListener('click', event => {
         infoBox.innerText = `${cell.isDifferentToOriginal ? 'has been changed' : 'still original'}`;
         
         return;
+    }
+    
+    if(event.target.matches('[data-double-resources-button]')) {
+        return doubleAllCountryResources(cell);
     }
 });
 
