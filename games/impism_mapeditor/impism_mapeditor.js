@@ -438,6 +438,9 @@ class Cell {
         else if(direction === 'E') neighbourX++;
         else if((this.y % 2 === 0) && ['NW','SW'].find(item => item === direction)) neighbourX--;
         else if((this.y % 2 === 1) && ['NE','SE'].find(item => item === direction)) neighbourX++;
+        
+        if(neighbourY < 0 || neighbourY >= processedMap.length) return null;
+        if(neighbourX < 0 || neighbourX >= processedMap.at(neighbourY).length) return null;
 
         return processedMap.at(neighbourY).at(neighbourX);
     }
@@ -705,22 +708,22 @@ function getCleanPaintedCellClone(cell, removeHighlight = true) {
 
 /**
  * 
- * @param {Cell} cell
+ * @param {Cell|null} cell
  * @param {int|null} countryId
- * @param {string} direction
  * @returns {void}
  */
-function doubleAllCountryResources(cell, countryId = null, direction = 'start') {
+function doubleAllCountryResources(cell, countryId = null) {
+    if(cell === null) return;
     if(cell.resourceDoubled) return;
     if(countryId !== null && cell.NationOrSeazone !== countryId) return;
     
     cell.doubleResource();
-    doubleAllCountryResources(cell.getNeighbour('NW'), cell.NationOrSeazone, 'NW');
-    doubleAllCountryResources(cell.getNeighbour('NE'), cell.NationOrSeazone, 'NE');
-    doubleAllCountryResources(cell.getNeighbour('W'), cell.NationOrSeazone, 'W');
-    doubleAllCountryResources(cell.getNeighbour('E'), cell.NationOrSeazone, 'E');
-    doubleAllCountryResources(cell.getNeighbour('SW'), cell.NationOrSeazone, 'SW');
-    doubleAllCountryResources(cell.getNeighbour('SE'), cell.NationOrSeazone, 'SE');
+    doubleAllCountryResources(cell.getNeighbour('NW'), cell.NationOrSeazone);
+    doubleAllCountryResources(cell.getNeighbour('NE'), cell.NationOrSeazone);
+    doubleAllCountryResources(cell.getNeighbour('W'), cell.NationOrSeazone);
+    doubleAllCountryResources(cell.getNeighbour('E'), cell.NationOrSeazone);
+    doubleAllCountryResources(cell.getNeighbour('SW'), cell.NationOrSeazone);
+    doubleAllCountryResources(cell.getNeighbour('SE'), cell.NationOrSeazone);
 }
 
 const terrainDialog = Helper.getElement('dialog', null, document.body);
