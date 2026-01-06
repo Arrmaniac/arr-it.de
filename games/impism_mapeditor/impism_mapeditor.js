@@ -711,16 +711,16 @@ function getCleanPaintedCellClone(cell, removeHighlight = true) {
  * @returns {void}
  */
 function doubleAllCountryResources(cell, countryId = null, direction = 'start') {
-    if(countryId !== null && cell.NationOrSeazone !== countryId) return;
     if(cell.resourceDoubled) return;
+    if(countryId !== null && cell.NationOrSeazone !== countryId) return;
     
     cell.doubleResource();
-    if(['start', 'NW', 'NE'].indexOf(direction) > -1) doubleAllCountryResources(cell.getNeighbour('NW'), cell.NationOrSeazone, 'NW');
-    if(['start', 'NE', 'NW'].indexOf(direction) > -1) doubleAllCountryResources(cell.getNeighbour('NE'), cell.NationOrSeazone, 'NE');
-    if(['start', 'W', 'SW', 'NW'].indexOf(direction) > -1)  doubleAllCountryResources(cell.getNeighbour('W'), cell.NationOrSeazone, 'W');
-    if(['start', 'E', 'SE', 'NE'].indexOf(direction) > -1)  doubleAllCountryResources(cell.getNeighbour('E'), cell.NationOrSeazone, 'E');
-    if(['start','SW', 'SE'].indexOf(direction) > -1) doubleAllCountryResources(cell.getNeighbour('SW'), cell.NationOrSeazone, 'SW');
-    if(['start','SE', 'SW'].indexOf(direction) > -1) doubleAllCountryResources(cell.getNeighbour('SE'), cell.NationOrSeazone, 'SE');
+    doubleAllCountryResources(cell.getNeighbour('NW'), cell.NationOrSeazone, 'NW');
+    doubleAllCountryResources(cell.getNeighbour('NE'), cell.NationOrSeazone, 'NE');
+    doubleAllCountryResources(cell.getNeighbour('W'), cell.NationOrSeazone, 'W');
+    doubleAllCountryResources(cell.getNeighbour('E'), cell.NationOrSeazone, 'E');
+    doubleAllCountryResources(cell.getNeighbour('SW'), cell.NationOrSeazone, 'SW');
+    doubleAllCountryResources(cell.getNeighbour('SE'), cell.NationOrSeazone, 'SE');
 }
 
 const terrainDialog = Helper.getElement('dialog', null, document.body);
