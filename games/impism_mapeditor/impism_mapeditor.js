@@ -206,6 +206,7 @@ class Cell {
     y = 0;
     paintedCell;
     resourceDoubled = false;
+    reforested = false;
 
     constructor(payload, byteIndex, x, y) {
         this.payload = payload;
@@ -425,6 +426,15 @@ class Cell {
         if(this.payload[18] !== 255 && !overrideB) return;
         this.changeResource('b',this.ResourceA, this.payload[17]);
         this.resourceDoubled = true;
+    }
+    
+    reforestShrubs() {
+        if(this.reforested) return;
+        if(this.TerrainOverlay === terrain_overlay_reversed['scrub-forest']) {
+            this.changeResource('a', 'forest', 2);
+        }
+        
+        this.reforested = true;
     }
 
     getNeighbour(direction) {
@@ -708,22 +718,40 @@ function getCleanPaintedCellClone(cell, removeHighlight = true) {
 
 /**
  * 
- * @param {Cell|null} cell
+ * @param {cell|null} cell
+ * @param {function} cbAction
+ * @param {function} cbActionDone
  * @param {int|null} countryId
  * @returns {void}
  */
-function doubleAllCountryResources(cell, countryId = null) {
+function applyActionToWholeCountry(cell, cbAction, cbActionDone, countryId = null) {
     if(cell === null) return;
-    if(cell.resourceDoubled) return;
+    if(cbActionDone(cell)) return;
     if(countryId !== null && cell.NationOrSeazone !== countryId) return;
-    
-    cell.doubleResource();
-    doubleAllCountryResources(cell.getNeighbour('NW'), cell.NationOrSeazone);
-    doubleAllCountryResources(cell.getNeighbour('NE'), cell.NationOrSeazone);
-    doubleAllCountryResources(cell.getNeighbour('W'), cell.NationOrSeazone);
-    doubleAllCountryResources(cell.getNeighbour('E'), cell.NationOrSeazone);
-    doubleAllCountryResources(cell.getNeighbour('SW'), cell.NationOrSeazone);
-    doubleAllCountryResources(cell.getNeighbour('SE'), cell.NationOrSeazone);
+
+    cbAction(cell);
+    applyActionToWholeCountry(cell.getNeighbour('NW'), cbAction, cbActionDone, cell.NationOrSeazone);
+    applyActionToWholeCountry(cell.getNeighbour('NE'), cbAction, cbActionDone, cell.NationOrSeazone);
+    applyActionToWholeCountry(cell.getNeighbour('W'), cbAction, cbActionDone, cell.NationOrSeazone);
+    applyActionToWholeCountry(cell.getNeighbour('E'), cbAction, cbActionDone, cell.NationOrSeazone);
+    applyActionToWholeCountry(cell.getNeighbour('SW'), cbAction, cbActionDone, cell.NationOrSeazone);
+    applyActionToWholeCountry(cell.getNeighbour('SE'), cbAction, cbActionDone, cell.NationOrSeazone);
+}
+
+function doubleAllCountryResources(cell) {
+    return applyActionToWholeCountry(
+            cell, 
+            (cell) => cell.doubleResource(), 
+            (cell) => cell.resourceDoubled,
+    );
+}
+
+function reforestAllCountryShrubs(cell) {
+    return applyActionToWholeCountry(
+            cell, 
+            (cell) => cell.reforestShrubs, 
+            (cell) => cell.reforested,
+    );
 }
 
 const terrainDialog = Helper.getElement('dialog', null, document.body);
@@ -790,7 +818,10 @@ canvas.addEventListener('click', event => {
     southRow.append(getCleanPaintedCellClone(cell.getNeighbour('SE')));
     
     let countryView = Helper.getElement('li', null, actionList);
-    countryView.innerHTML = `<details><summary>Country</summary><div data-details><button data-double-resources-button>Double all Country's resources</button></div></details>`;
+    countryView.innerHTML = `<details><summary>Country</summary><div data-details>
+        <button data-double-resources-button>Double all Country's resources</button>
+        <button data-reforest-button>Reforest all Country's shrubs</button>
+    </div></details>`;
 
     terrainDialog.showModal();
 }, true);
@@ -830,6 +861,9 @@ terrainDialog.addEventListener('click', event => {
     
     if(event.target.matches('[data-double-resources-button]')) {
         return doubleAllCountryResources(cell);
+    }
+    if(event.target.matches('[data-reforest-button]')) {
+        return reforestAllCountryShrubs(cell);
     }
 });
 
