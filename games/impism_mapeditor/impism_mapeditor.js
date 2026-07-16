@@ -749,7 +749,7 @@ function doubleAllCountryResources(cell) {
 function reforestAllCountryShrubs(cell) {
     return applyActionToWholeCountry(
             cell, 
-            (cell) => cell.reforestShrubs, 
+            (cell) => cell.reforestShrubs(), 
             (cell) => cell.reforested,
     );
 }
