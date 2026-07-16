@@ -31,7 +31,7 @@ const terrain_overlay = {
 	"16":	"capital"		//(may be inactive as byte 30 determines town type)
 };
 
-let terrain_overlay_reversed = Object.fromEntries(Object.entries(terrain_overlay).map(item => parseInt(item.reverse())));
+let terrain_overlay_reversed = Object.fromEntries(Object.entries(terrain_overlay).map(item => item.reverse()));
 
 const resources = {
     "0":	"cotton",
@@ -431,7 +431,7 @@ class Cell {
     reforestShrubs() {
         console.log(this, `trying to reforest...`);
         if(this.reforested) return console.log(`already reforested.`, this);
-        if(this.TerrainOverlay === terrain_overlay_reversed['scrub-forest']) {
+        if(this.TerrainOverlay === parseInt(terrain_overlay_reversed['scrub-forest'])) {
             console.log(`reforesting shrub...`);
             this.changeResource('a', 'forest', 2);
         }
