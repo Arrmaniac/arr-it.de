@@ -741,7 +741,7 @@ function applyActionToWholeCountry(cell, cbAction, cbActionDone, countryId = nul
 function doubleAllCountryResources(cell) {
     return applyActionToWholeCountry(
             cell, 
-            (cell) => cell.doubleResource(), 
+            (cell) => {cell.doubleResource()}, 
             (cell) => cell.resourceDoubled,
     );
 }
@@ -749,7 +749,7 @@ function doubleAllCountryResources(cell) {
 function reforestAllCountryShrubs(cell) {
     return applyActionToWholeCountry(
             cell, 
-            (cell) => cell.reforestShrubs(), 
+            (cell) => {cell.reforestShrubs();}, 
             (cell) => cell.reforested,
     );
 }
