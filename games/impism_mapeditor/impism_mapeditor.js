@@ -233,6 +233,7 @@ class Cell {
         'province': this.Province,
         'resource_a': this.ResourceA,
         'resource_b': this.ResourceB,
+        'improvement_level': this.ImprovementLevel,
         'town_type': this.TownType
         }, null, '  ');
     }
@@ -246,6 +247,10 @@ class Cell {
         }
 
         return false;
+    }
+    
+    get ImprovementLevel() {
+        return this.payload.at(12);
     }
 
     get TerrainUnderlay() {
@@ -437,6 +442,20 @@ class Cell {
         }
         
         this.reforested = true;
+    }
+    
+    setImprovementLevel(newLevel) {
+        if(![0,1,2,3].includes(newLevel)) return console.warn(`Tried invalid improvement-level`, newLevel);
+        
+        if(['coal', 'iron', 'oil', 'gold', 'gems'].includes(this.ResourceA)) {
+            newLevel *= 16;
+            this.payload[13] = (newLevel === 0) ? 32 : 127;
+        }
+        
+        if(newLevel === this.ImprovementLevel) return console.log(`level unchanged`);
+        
+        console.log(`setting new improvment level`, this, newLevel);
+        this.payload[12] = newLevel;
     }
 
     getNeighbour(direction) {
@@ -824,6 +843,13 @@ canvas.addEventListener('click', event => {
         <button data-double-resources-button>Double all Country's resources</button>
         <button data-reforest-button>Reforest all Country's shrubs</button>
     </div></details>`;
+    
+    let tileActions = Helper.getElement('li', null, actionList);
+    tileActions.innerHTML = `<details><summary>Further Tile Actions</summary><div data-details>
+        <button data-tile-improvement-button data-level="1">Lvl-1</button>
+        <button data-tile-improvement-button data-level="2">Lvl-2</button>
+        <button data-tile-improvement-button data-level="3">Lvl-3</button>
+    </div></details>`;
 
     terrainDialog.showModal();
 }, true);
@@ -866,6 +892,9 @@ terrainDialog.addEventListener('click', event => {
     }
     if(event.target.matches('[data-reforest-button]')) {
         return reforestAllCountryShrubs(cell);
+    }
+    if(event.target.matches('[data-tile-improvement-button]')) {
+        return cell.setImprovementLevel(parseInt(event.target.dataset.level));
     }
 });
 

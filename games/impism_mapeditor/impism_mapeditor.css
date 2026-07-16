@@ -147,6 +147,25 @@ h1,h2,h3,h4,h5,h6 {
     background-position: -256px -192px;
 }
 
+.improvement {
+    position: absolute;
+    display: inline-block;
+    width: 76px;
+    height: 52px;
+    background-image: url('assets/improvements_tiles_34pieces_a_76x52.png');
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+
+.improvment.granary-lvl-1 {
+    background-position: 0px 0px;
+}
+
+.improvment.granary-lvl-2 {
+    background-position: 0px -76px;
+}
+
+/* ... more improvement definitions be here ... */
 
 .code-view {
     white-space: pre-wrap;
