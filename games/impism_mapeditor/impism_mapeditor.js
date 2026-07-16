@@ -430,7 +430,7 @@ class Cell {
     
     reforestShrubs() {
         console.log(this, `trying to reforest...`);
-        if(this.reforested) return console.log(`already reforested.`, this);
+        if(this.reforested) return console.log(`already reforested.`, this, this.TerrainOverlay, parseInt(terrain_overlay_reversed['scrub-forest']));
         if(this.TerrainOverlay === parseInt(terrain_overlay_reversed['scrub-forest'])) {
             console.log(`reforesting shrub...`);
             this.changeResource('a', 'forest', 2);
