@@ -31,7 +31,7 @@ const terrain_overlay = {
 	"16":	"capital"		//(may be inactive as byte 30 determines town type)
 };
 
-let terrain_overlay_reversed = Object.fromEntries(Object.entries(terrain_overlay).map(item => item.reverse()));
+let terrain_overlay_reversed = Object.fromEntries(Object.entries(terrain_overlay).map(item => parseInt(item.reverse())));
 
 const resources = {
     "0":	"cotton",
