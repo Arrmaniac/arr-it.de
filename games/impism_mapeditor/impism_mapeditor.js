@@ -741,7 +741,7 @@ function applyActionToWholeCountry(cell, cbAction, cbActionDone, countryId = nul
 function doubleAllCountryResources(cell) {
     return applyActionToWholeCountry(
             cell, 
-            (cell) => {cell.doubleResource()}, 
+            (cell) => {cell.doubleResource();}, 
             (cell) => cell.resourceDoubled,
     );
 }
