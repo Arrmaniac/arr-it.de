@@ -458,6 +458,11 @@ class Cell {
         this.payload[12] = newLevel;
     }
 
+    /**
+     * 
+     * @param {string} direction
+     * @returns {Cell|null} neighbour-cell at direction or null
+     */
     getNeighbour(direction) {
         let neighbourX = this.x;
         let neighbourY = this.y;
@@ -480,7 +485,7 @@ class Cell {
         let currentValue = this.payload.at(10);
         let self = this;
         let newValue = ['NE', 'E', 'SE', 'SW', 'W', 'NW'].reduce((carry, item, index) => {
-            let isSimilarTile = (self.TerrainOverlay === self.getNeighbour(item).TerrainOverlay) ? 1 : 0;
+            let isSimilarTile = (self.TerrainOverlay === self.getNeighbour(item)?.TerrainOverlay) ? 1 : 0;
             carry |= isSimilarTile << (index);
             return carry;
         }, 0);
