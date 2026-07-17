@@ -456,6 +456,7 @@ class Cell {
         
         console.log(`setting new improvment level`, this, newLevel);
         this.payload[12] = newLevel;
+        numChangedCells++;
     }
 
     /**
@@ -494,7 +495,26 @@ class Cell {
         
         if(currentValue !== newValue) {
             console.log(`Changing tile adjacent similar indicator`, this, currentValue, newValue);
+            numChangedCells++;
             this.payload[10] = newValue;
+        }
+    }
+    
+    fixHillToMountainAdjacencyIndicator() {
+        if(this.TerrainOverlay !== 'hill') return console.debug(`Skipping non-hill tile.`);
+        
+        let currentValue = this.payload.at(11);
+        let self = this;
+        let newValue = ['NE', 'E', 'SE', 'SW', 'W', 'NW'].reduce((carry, item, index) => {
+            let isMountainTile = (self.getNeighbour(item)?.TerrainOverlay === 'mountain') ? 1 : 0;
+            carry |= isMountainTile << (index);
+            return carry;
+        }, 0);
+        
+        if(currentValue !== newValue) {
+            console.log(`Changing hill to mountain indicator`, this, currentValue, newValue);
+            numChangedCells++;
+            this.payload[11] = newValue;
         }
     }
 }
@@ -874,8 +894,9 @@ canvas.addEventListener('click', event => {
     </div></details>`;
     
     let globalActions = Helper.getElement('lie', null, actionList);
-    globalActions.innerHTML = `<details><summary>Further Tile Actions</summary><div data-details>
+    globalActions.innerHTML = `<details><summary>Global Actions</summary><div data-details>
         <button data-global-tile-adjacency-like-fix-button>Fix tile-adjacency globally</button>
+        <button data-global-hill-to-mountain-fix-button>Fix hill-to-mountain globally</button>
     </div></details>`;
 
     terrainDialog.showModal();
@@ -927,6 +948,11 @@ terrainDialog.addEventListener('click', event => {
         console.time(`fix adjacency similar tiles`);
         processedMap.map(row => row.map(tile => tile.fixAdjacentSimilarTilesIndicator()));
         console.timeEnd(`fix adjacency similar tiles`);
+    }
+    if(event.target.matches('[data-global-hill-to-mountain-fix-button]')) {
+        console.time(`fix hill to mountain indicators`);
+        processedMap.map(row => row.map(tile => tile.fixHillToMountainAdjacencyIndicator()));
+        console.timeEnd(`fix hill to mountain indicators`);
     }
 });
 
