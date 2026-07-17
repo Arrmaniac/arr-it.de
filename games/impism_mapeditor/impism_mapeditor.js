@@ -482,6 +482,8 @@ class Cell {
     }
     
     fixAdjacentSimilarTilesIndicator() {
+        if(this.TerrainOverlay === 'ocean') return console.debug(`Not attempting to fix ocean adjacency indicator at this time.`);
+        
         let currentValue = this.payload.at(10);
         let self = this;
         let newValue = ['NE', 'E', 'SE', 'SW', 'W', 'NW'].reduce((carry, item, index) => {
