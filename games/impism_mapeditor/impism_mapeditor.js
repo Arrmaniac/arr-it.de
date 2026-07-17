@@ -475,6 +475,21 @@ class Cell {
 
         return processedMap.at(neighbourY).at(neighbourX);
     }
+    
+    fixAdjacentSimilarTilesIndicator() {
+        let currentValue = this.payload.at(10);
+        let self = this;
+        let newValue = ['NE', 'E', 'SE', 'SW', 'W', 'NW'].reduce((carry, item, index) => {
+            let isSimilarTile = (self.TerrainOverlay === self.getNeighbour(item).TerrainOverlay) ? 1 : 0;
+            carry |= isSimilarTile << (index);
+            return carry;
+        }, 0);
+        
+        if(currentValue !== newValue) {
+            console.log(`Changing tile adjacent similar indicator`, this, currentValue, newValue);
+            this.payload[10] = newValue;
+        }
+    }
 }
 
 /*
@@ -850,6 +865,11 @@ canvas.addEventListener('click', event => {
         <button data-tile-improvement-button data-level="2">Lvl-2</button>
         <button data-tile-improvement-button data-level="3">Lvl-3</button>
     </div></details>`;
+    
+    let globalActions = Helper.getElement('lie', null, actionList);
+    globalActions.innerHTML = `<details><summary>Further Tile Actions</summary><div data-details>
+        <button data-global-tile-adjacency-like-fix-button>Fix tile-adjacency globally</button>
+    </div></details>`;
 
     terrainDialog.showModal();
 }, true);
@@ -895,6 +915,11 @@ terrainDialog.addEventListener('click', event => {
     }
     if(event.target.matches('[data-tile-improvement-button]')) {
         return cell.setImprovementLevel(parseInt(event.target.dataset.level));
+    }
+    if(event.target.matches('[data-global-tile-adjacency-like-fix-button]')) {
+        console.time(`fix adjacency similar tiles`);
+        processedMap.map(row => row.map(tile => tile.fixAdjacentSimilarTilesIndicator()));
+        console.timeEnd(`fix adjacency similar tiles`);
     }
 });
 
